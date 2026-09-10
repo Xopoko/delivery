@@ -3,6 +3,24 @@
 Notable changes are recorded here. A version entry describes the source;
 available release tags and assets are listed on GitHub separately.
 
+## 0.4.0
+
+- Expand all seven non-Apple delivery channels with current first-release,
+  update, partial-failure and recovery guidance, backed by official sources and
+  selected public release-tool implementations.
+- Add Google Play account and artifact readiness, native 16KB checks, edit and
+  executor semantics, exact-version promotion, and conditional Billing/QA paths.
+- Clarify Microsoft Store bootstrap, submission writer ownership, test audiences
+  and hosted installers; add Chrome v2 revision/rollout reconciliation and the
+  narrowly eligible rules-only update route.
+- Add LinkedIn/X media processing, partial thread and scheduler recovery;
+  distinguish YouTube channel authority, quota buckets, resumable offsets,
+  caption visibility and scheduled-publication proof.
+- Add focused managed-host flows for Pages, Workers, Vercel and Netlify, plus
+  service-specific AWS flows for ECS, Lambda, stacks, static delivery and Lightsail.
+- Add a channel coverage map and refreshed source provenance. Retain the existing
+  receipt helper, dependency footprint, Apple guidance and approved artwork.
+
 ## 0.3.3
 
 - Correct Microsoft Store draft-replacement semantics and Chrome rollback

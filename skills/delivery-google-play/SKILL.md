@@ -2,9 +2,9 @@
 name: delivery-google-play
 description: >-
   Deliver an Android release through Google Play: bind account, AAB, signing
-  identity; stage tracks, submit, roll out, recover, and prove Store
-  installation. Excludes app development, fabricated declarations/testers, and
-  unapproved release.
+  identity; qualify first releases, stage tracks, submit, roll out, deliver an
+  optional purchase catalog, recover, and prove Store installation. Excludes
+  app development, fabricated declarations/testers, and unapproved release.
 ---
 
 # Google Play Delivery
@@ -19,34 +19,49 @@ does not design, implement, or debug application features.
 
 1. Name the requested effect: prepare a draft, distribute to a test track,
    submit for review, release to production, change a staged rollout, or recover
-   an existing delivery. Bind the exact developer account, application record,
+   an existing delivery. Treat purchase catalogs, Internal App Sharing,
+   preregistration, and unpublishing as optional, separately scoped effects.
+   Bind the exact developer account, application record,
    `packageName`, track, countries, release mode, and current Play Console state.
 2. Inspect the app dashboard, Publishing overview, App content, Policy status,
    App integrity, and active releases before writing. Discover account-specific
-   developer verification/package registration, current target API,
-   production-access and tester prerequisites live; do not infer them from the
-   account's age or from a remembered threshold.
+   developer verification/package registration, target API by form factor,
+   native 16KB compatibility, applicable Billing Library policy, and actual
+   production-access/tester prerequisites. Build the reference's dated readiness
+   matrix; elapsed testing time is not a production-access approval.
 3. Bind one release candidate by source revision, `versionCode`, version name,
    AAB path, byte size, SHA-256, upload-certificate fingerprint, and the distinct
-   Play app-signing certificate fingerprint. Rebuild with the project's release
-   task, validate with `bundletool`, and perform a local generated-APK install
-   smoke before upload. A later Play-distributed install is separate proof.
+   Play app-signing certificate fingerprint. Reuse the bound, tested artifact
+   and version for promotion or unchanged-binary delivery while its proof remains
+   applicable. Build only when needed with the project's release task, then run
+   relevant `bundletool` validation and local generated-APK install smoke before
+   upload. Check transitive native libraries when present; local
+   alignment, a 16KB runtime test, and a later Play-distributed install are
+   separate evidence. Preserve release-matched mapping/symbol files when used.
 4. Prefer an already working project-native release path. Use Gradle Play
    Publisher, fastlane, or EAS only when the project already owns it or the user
    explicitly chooses that dependency or cloud boundary. Otherwise use the
    Android Publisher API for supported repeatable operations and official Play
    Console UI for record creation, first-release bootstrap, declarations, and
-   gaps in API coverage.
+   gaps in API coverage. Bind explicit artifact/track/status parameters and
+   inspect defaults: a tool's validation or read command may still open an edit
+   or upload data. Never resolve an artifact conflict by silently renumbering it.
 5. Reconcile the listing and every required App content answer against observed
    product behavior: Data safety, privacy policy, ads, target audience, app
-   access, content rating, permissions, and any live dashboard requirement.
+   access, account deletion, content rating, permissions, and any live dashboard
+   requirement. Prove a reusable reviewer path to restricted features. For a
+   requested purchase catalog, bind product/plan/offer identities and sandbox
+   entitlement proof; track enrollment alone does not prevent real charges.
    Ask the user to attest only facts the agent cannot observe. Never invent an
    answer, reviewer credential, legal declaration, or tester participation.
 6. Stage the least-public useful route: internal, closed, open, then production
-   as eligibility and requested effect require. For API writes, create one edit,
+   as eligibility and requested effect require; this is not a mandatory ladder.
+   Resolve actual track IDs and competing eligible version codes. For API writes,
+   coordinate one edit owner, create one edit,
    add the exact artifact and intended mutations, validate it, show the resulting
    target diff, then commit once with review-safe behavior. Treat an ambiguous
-   response as unknown and reconcile read-only before retrying.
+   response as unknown and reconcile before retrying. Preserve retained releases
+   and untouched metadata. Catalog and Data safety writes are outside this edit.
    Remember that internal testing ignores country targeting and that other
    tracks use Play-account country semantics; prove the intended audience with
    an eligible account.
@@ -58,12 +73,15 @@ does not design, implement, or debug application features.
    exact or an explicit approval is required.
 8. Follow external state without collapsing it: uploaded, processing, staged,
    sent for review, in review, approved, ready to publish, serving, and verified.
+   Use fresh, version-specific health evidence before expanding a rollout.
    On rejection or timeout, read Play Console and the current edit/release first;
    do not create a duplicate app, upload, edit, or production release.
 9. Finish only with evidence matching the requested effect. Public delivery
    requires the canonical public listing, the expected live `versionCode`, and a
    clean Google Play install/update-and-launch smoke on an eligible device or a
    precise statement of the still-external review or propagation blocker.
+   Internal App Sharing is separate QA distribution; remote app recovery is a
+   user update prompt, not proof that every targeted device updated.
 
 ## Boundaries
 

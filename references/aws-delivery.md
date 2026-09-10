@@ -4,6 +4,9 @@ Official AWS contracts checked **2026-08-24**. AWS service features, quotas,
 runtime versions, deployment options and prices change. Observe the current
 account/region/resource and official service contract during every release.
 Consumer access guidance rechecked **2026-09-10**.
+Service release lifecycles expanded and rechecked **2026-09-10** in
+[AWS service release flows](aws-service-release-flows.md). Load the matching
+service branch after binding identity below.
 
 ## Evidence boundary
 
@@ -33,6 +36,11 @@ Bind:
 An AWS CLI default profile, resource display name, mutable tag or remembered
 region is not identity. Resolve image tags to digests and rendered infrastructure
 to the provider revision that will actually run.
+
+For a first release, mark the absence of a known-good deployment explicitly.
+An existing service name is not a rollback baseline. Check whether the selected
+executor also creates resources, runs migrations or switches traffic; classify
+each real effect before using a command advertised as a preview or validation.
 
 ## Use the natural service owner
 

@@ -1,6 +1,6 @@
 {
   "name": "delivery",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Release workflows for apps, extensions, social posts, video, websites, and AWS. Bind the artifact, stage safely, recover uncertain effects, and verify the result.",
   "author": {
     "name": "Xopoko"

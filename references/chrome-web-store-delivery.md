@@ -1,8 +1,8 @@
 # Chrome Web Store delivery
 
-Official requirements checked **2026-08-24**. Review times, policy language,
-API versions, rollout eligibility and dashboard fields are mutable; refresh the
-linked official pages during a real delivery.
+Official lifecycle and API guidance refreshed **2026-09-10**. Review times,
+policy language, API versions, rollout eligibility and dashboard fields are
+mutable; refresh the linked official pages during a real delivery.
 
 ## Evidence boundary
 
@@ -85,6 +85,35 @@ Markdown as a published policy.
 
 ## Dashboard and API boundary
 
+### Prepare a first listing or a coherent update
+
+Reuse an existing item when one matches the product. For a first item, prepare
+the bound package, create the item in the Dashboard under the shared authority
+contract, then complete listing, privacy and distribution. Add reviewer test
+instructions only when gated or paid features need them. Preserve the returned
+item ID for later updates; the upload is not a review submission. See the
+[first-publication sequence](https://developer.chrome.com/docs/webstore/publish)
+and [conditional test instructions](https://developer.chrome.com/docs/webstore/cws-dashboard-test-instructions).
+
+Create one release-scoped packet in existing project release documents or a
+private task artifact; a new permanent repository file is not required:
+
+| Release fact | Evidence and prepared output |
+| --- | --- |
+| Feature or behavior changed | Exact packaged implementation plus one product-critical smoke; accurate user-facing description and current assets |
+| Permission/host access changed | Manifest diff, feature needing the access and plain-language justification |
+| Data flow changed | Data handled, storage/transmission destinations and purpose; matching privacy answers and public policy |
+| Review needs special access | Short steps and evidence that the reviewer path works; credentials stay in the protected provider field |
+| Distribution changes | Item, audience/countries, version, release mode and intended rollout |
+
+Keep unresolved facts visible for the owner rather than filling attestations
+from a template. Update only release-relevant copy, screenshots and declarations;
+reviewer-only notes do not belong in the public description or package. See
+[listing fields](https://developer.chrome.com/docs/webstore/cws-dashboard-listing)
+and [privacy fields](https://developer.chrome.com/docs/webstore/cws-dashboard-privacy).
+
+### Choose an existing delivery surface
+
 Use the official Developer Dashboard for account registration/verification,
 first-item creation, listing and privacy bootstrap, distribution settings,
 policy declarations, ownership changes and any field the API does not expose.
@@ -113,6 +142,44 @@ The legacy v1 API is deprecated and scheduled to stop being supported on
 material. A service account is optional, not a reason to create a durable key
 for one release. A visibility change made in the dashboard can require a manual
 publish before API publication works again.
+
+| Already available route | Verify before using it |
+| --- | --- |
+| Project publisher such as `publish-browser-extension` | Installed version/API, exact item/file, upload-only versus review submission, cancellation behavior and secret custody; its documented dry-run checks authentication |
+| `cws-cli` / an existing CWS MCP adapter | Local validation versus provider calls, package/repack behavior, raw status fields and the actual serialized publish request |
+| Existing direct v2 integration | Supported scope, exact request body, warning handling and provider readback |
+| Dashboard | Current item, fields, release mode and fresh state after each effect |
+
+These are optional routes, not Delivery dependencies. Do not copy a tool's
+credential-initialization recipe or let a multi-store publisher widen the
+destination. Check behavior against the installed version: the
+[inspected publisher configuration](https://github.com/aklinker1/publish-browser-extension/blob/8ce1e500903796f738636a9ea741e76dae7e8985/docs/config-reference.md)
+distinguishes `skipSubmitReview` from staged publication; its `dryRun` still
+uses account access. The
+[inspected cws-cli publish code](https://github.com/vaughnbosu/cws-cli/blob/0fd7b1ddecfbc187529c9153ef128a6923b8e769/pkg/api/publish.go)
+omits rollout information for a 100-percent input, so the flag alone cannot
+prove full rollout.
+
+### Bind v2 request defaults and revision status
+
+Set publication intent deliberately. An omitted `publishType` means automatic
+publication after approval; `STAGED_PUBLISH` holds the approval for a later
+publish action. Omitted `deployInfos` inherits the saved Dashboard percentage,
+not necessarily 100%. Validate the actual request produced by the chosen
+adapter. Inspect returned warnings; `blockOnWarnings` can prevent submission
+when unresolved warnings should block the action. It is not a substitute for
+review. Do not silently retry with different warning or review settings. See
+the [publish request and defaults](https://developer.chrome.com/docs/webstore/api/reference/rest/v2/publishers.items/publish).
+
+For reconciliation, read both `publishedItemRevisionStatus` and
+`submittedItemRevisionStatus`; compare each available `crxVersion` and
+`deployPercentage` with the bound release. A published old revision can coexist
+with a new submitted one. Inspect `warned` and `takenDown` and use the Dashboard
+for enforcement details. `lastAsyncUploadState` is only populated for async
+uploads within the past 24 hours; absence is not proof of a failed or absent
+upload. If that evidence expired, inspect the existing Dashboard package and
+revision before considering another upload. Keep only sanitized facts in the
+receipt, not the full response. See [fetchStatus fields](https://developer.chrome.com/docs/webstore/api/reference/rest/v2/publishers.items/fetchStatus).
 
 ## Review, publication and rollout states
 
@@ -143,6 +210,30 @@ Public, Unlisted and Private have different discovery/audience but the same
 policy-review boundary. Private tester eligibility and Google Group/account
 membership must be observed. A parallel beta/testing extension is a separate
 item and can trigger repetitive-content policy unless clearly differentiated.
+
+The account-wide trusted-tester list and per-item Google Groups together define
+the private tester audience. Verify that union and the Google Account used for
+the install. Unlisted permits anyone with the URL to install. A parallel test
+item needs `BETA` or `DEVELOPMENT BUILD` in its name and a clear beta-testing
+purpose in its description; do not create a duplicate production listing.
+Workspace domain publishing is a separate option available only when enabled
+by the domain administrator. See [distribution and test-item rules](https://developer.chrome.com/docs/webstore/cws-dashboard-distribution).
+
+### Eligible rules-only updates
+
+For an existing extension with required `declarativeNetRequest`, review can be
+skipped only when changes are confined to safe static rules in existing
+manifest-declared rule-resource files, apart from the required version bump.
+Do not add/remove rulesets or change other manifest, listing or visibility
+fields. Unpublished, warned or taken-down items do not qualify for this route.
+Opt in explicitly; the provider validates eligibility. If the API rejects
+`skipReview`, reconcile the item and intended next effect before choosing
+ordinary review. Do not promise expedited delivery or use a fallback that
+silently changes the authorized release mode. See the
+[eligibility rules](https://developer.chrome.com/docs/webstore/skip-review)
+and [API validation](https://developer.chrome.com/docs/webstore/api/reference/rest/v2/publishers.items/publish).
+
+### Rollback
 
 Chrome supports provider rollback to a previous version, but rollback is still
 a consequential Store transition. Read current eligibility and outcome, bind

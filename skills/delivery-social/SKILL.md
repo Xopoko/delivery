@@ -20,8 +20,8 @@ publication.
 1. Reconstruct the single communication outcome, destination, exact member or
    organization account, audience/visibility, timing, language, link, and
    whether the user asked for preparation, provider-supported scheduling, or
-   public posting. Keep
-   LinkedIn and X as separate provider objects even when they share facts.
+   public posting. Keep LinkedIn and X as separate provider objects even when
+   they share facts. For a thread, bind each segment and its expected parent.
 2. Mine only authoritative release inputs: the shipped artifact and public
    page, exact observed features, screenshots/demo, release notes, known
    limitations, attribution and rights. Build a compact fact ledger with a
@@ -38,9 +38,12 @@ publication.
    disclosure, rights attestation, scheduling time and timezone. Inspect the
    rendered preview and link card in a user-operated official UI when those
    materially affect the result.
-5. Observe identity and matching recent posts through a provider-permitted
-   read path. Publish automatically only through an official API or already-
-   approved integration. LinkedIn and X prohibit third-party browser automation
+5. Preflight identity, media upload/status, post/read, and any requested edit or
+   scheduling operation. Carry the exact app and account selector through every
+   request; a CLI's default account is not a delivery target. Observe identity
+   and matching recent posts through a provider-permitted read path. Publish
+   automatically only through an official API or an already approved integration.
+   LinkedIn and X prohibit third-party browser automation
    of posting/activity; do not type, click Submit, scrape authenticated feeds,
    or otherwise use Computer Use as a publisher. For LinkedIn, bind member `sub`
    or organization create authorization and whether a permitted read scope
@@ -49,26 +52,37 @@ publication.
    prepare the exact payload and open one user-operated official-UI handoff.
    Do not create a developer app, paid API plan, scheduler, MCP, or social-
    management service for one post.
-6. Show one final preview containing account, exact text, ordered media/alt
+6. Stage each media asset under the intended owner and bind its ID/URN to the
+   file hash, type and expiry. Follow the reference's LinkedIn multipart or X
+   initialize/append/finalize flow, then read processing readiness with a bounded
+   wait. Apply supplied alt text and requested caption/thumbnail choices before
+   posting. An upload acknowledgement does not prove attachment readiness.
+7. Show one final preview containing account, exact text, ordered media/alt
    text, link, audience, relationship, schedule, and whether the effect is
    immediately public. If the current request does not already authorize that
    exact public effect, request approval. A content draft is not permission to
    publish.
-7. Through the approved API, perform one post/schedule action and capture the
-   provider post ID or canonical URL. LinkedIn write access does not imply the
-   restricted member-read scope needed for autonomous reconciliation. In a
+8. Through the approved API, perform each bound post/schedule effect once and
+   capture its provider ID or canonical URL. For an X thread, persist each
+   returned post ID before replying with the next segment. Stop on the first
+   uncertain segment and preserve the successful prefix. A scheduler job ID
+   proves a scheduled job, not a LinkedIn/X post. LinkedIn write access does not
+   imply the restricted member-read scope needed for autonomous reconciliation. In a
    user-operated UI handoff, treat the returned URL or explicit user
    confirmation as user-attested until a permitted provider read proves it.
    After an ambiguous API response, reconcile by exact provider object or
    permitted newest-first account read. If that read is unavailable, keep
    `effect_unknown` and request one user-operated official-UI check; never
    publish a duplicate to manufacture certainty.
-8. Verify the provider state and canonical post surface through the official API
+9. Verify the provider state and canonical post surface through the official API
    or a provider-permitted public lookup. If only the official UI can show it,
    request one user-operated confirmation and label it `user-attested`; do not
    automate authenticated feed reading. Confirm exact
    author, text, media, link, visibility, ordering/thread relationship, and
-   schedule or publication time.
+   schedule or publication time. Distinguish processing, scheduled and published
+   states, and verify protected content through permitted intended-audience
+   access. When later publication verification is requested, reconcile the
+   scheduler job with the resulting provider IDs instead of assuming it fired.
 
 ## Boundaries
 
@@ -85,9 +99,11 @@ publication.
   impact and a fresh preview.
 - Never auto-reply, react, follow, mention people, send DMs, boost, or cross-post
   to an unrequested account. Do not turn publication into engagement work.
-- OAuth tokens, cookies, session state, media upload handles, and drafts with
-  private launch facts stay out of chat, Git, logs, screenshots, and receipts.
+- OAuth tokens, cookies, session state, signed media upload URLs/tokens, and
+  drafts with private launch facts stay out of chat, Git, logs, screenshots,
+  and receipts. Record nonsensitive media IDs separately from protected handles.
 
-Completion is `prepared`, `scheduled`, `posted`, or `publicly verified` for
-each channel separately. A user-attested older post is historical evidence,
-not a current provider receipt.
+Completion is `prepared`, `scheduled`, `posted`, or `consumer verified` for
+each channel separately. Use `publicly verified` only for intended public
+content with permitted anonymous proof. A user-attested older post is
+historical evidence, not a current provider receipt.

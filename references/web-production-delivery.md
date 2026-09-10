@@ -4,6 +4,8 @@ Official Cloudflare contracts checked **2026-08-24**. This runbook is
 provider-neutral at the origin and composes the project's existing platform.
 It does not choose a cloud architecture or teach application implementation.
 Tunnel management and consumer access guidance rechecked **2026-09-10**.
+Managed-host and edge lifecycles checked **2026-09-10** in the
+[managed platform reference](web-managed-platforms.md).
 
 ## Evidence boundary
 
@@ -19,8 +21,9 @@ exact revision from being identified or restored.
 Bind one deployment epoch:
 
 ```text
-owner/account + environment + canonical hostname + origin host/service/listener
-+ ingress/tunnel/proxy + DNS/TLS route + source revision/artifact/image digest
+owner/account + environment + canonical hostname + host/service or managed project
++ applicable listener/ingress/tunnel/proxy + DNS/TLS route + exact build/deployment ID
++ source revision/artifact/image digest
 + config schema + secret-reference revision + data/migration revision
 + release effect + traffic mode + audience/access policy + known-good recovery target
 ```
@@ -33,6 +36,13 @@ database dumps, customer data or raw config responses.
 ## Observe and preflight
 
 Read repository guidance and live topology before choosing commands:
+
+Choose the existing deployment owner first. For managed static/edge platforms,
+read the [managed platform flow](web-managed-platforms.md): bind the project,
+build environment, deployment ID and domain assignment. SSH, a process supervisor
+and listening ports are host-specific checks, not prerequisites for managed
+hosting. For an origin you operate, apply the host checks below; inspect only
+components present in the actual route.
 
 1. source revision and dirty state; build/runtime lock files; current artifact
    or image digest; current deployed revision evidence;
@@ -73,6 +83,11 @@ Prefer the cheapest reversible stage:
 - create a provider preview/zero-traffic version;
 - run migrations in the project-defined safe order;
 - prove origin health before DNS/route/traffic change.
+
+A provider preview may already be publicly reachable and can use production
+backend bindings. Verify its intended access and side effects before staging.
+For managed deployments, build readiness and preview proof precede a separately
+bound domain promotion; a successful build is not necessarily serving traffic.
 
 On a single in-place host, capture the current revision and service/config
 state, take the required backup, dry-run the transition, set an explicit
@@ -144,7 +159,8 @@ recovery boundary.
 
 Completion evidence:
 
-- `origin_staged`: exact revision runs privately and passes origin health/smoke;
+- `origin_staged`: exact revision passes health/smoke behind the intended staged
+  access boundary; identify any publicly reachable preview explicitly;
 - `deployed`: supervisor/provider reports exact revision healthy on target;
 - `traffic_cut_over`: canonical route targets that revision;
 - `consumer_verified`: the intended HTTPS DNS/TLS/edge path and product-critical

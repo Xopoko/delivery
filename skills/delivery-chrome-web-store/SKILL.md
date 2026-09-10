@@ -40,30 +40,41 @@ before a provider write.
 4. Reconcile listing copy, icons/screenshots, category, language, support and
    privacy URLs, single-purpose explanation, permission justifications, data
    use/handling, authentication, payments, distribution visibility, countries,
-   and trusted testers against the shipped bytes. Never minimize or fabricate
-   a disclosure merely to improve review odds.
+   and trusted testers against the shipped bytes. Produce the reference's
+   release packet tying changed features to permission/data declarations and
+   smoke evidence. Separate public copy from reviewer-only instructions;
+   provide working test access only when features require it. Never minimize or
+   fabricate a disclosure merely to improve review odds.
 5. Use Developer Dashboard for developer-account bootstrap, fee/identity/2SV,
    the first item, privacy and listing forms, distribution changes, and fields
    the current API cannot represent. For an existing item, prefer a reviewed
    project-native publisher or Chrome Web Store API v2 only after probing its
    live auth, item/status, upload, publish, staged-publish, cancel, and rollout
-   behavior. Do not introduce a publisher framework or service-account key for
-   one release.
+   behavior. Check the adapter's exact-file/repack behavior, auth/network effects,
+   default audience, auto-cancellation and serialized release intent. A dry-run
+   flag may still authenticate. Do not introduce a publisher framework or
+   service-account key for one release.
 6. Upload the exact bound ZIP or Verified-CRX artifact once and read back its
    version/status/warnings. Preview item, format, hash, version,
    permission/data diffs, listing revision, visibility, countries, release
-   mode, rollout, and the precise next effect. Then submit or publish once
-   under the shared authority contract.
+   mode, rollout, and the precise next effect. Explicitly choose automatic or
+   staged publishing and the intended rollout; omitted API fields can inherit
+   Dashboard settings. Review warnings, then submit or publish once under the
+   shared authority contract. Use skip-review only for the narrowly eligible
+   rules-only updates described in the reference.
 7. Preserve provider states: uploaded draft, pending review, rejected, approved
    and staged, published, partial rollout, full rollout, removed, and verified.
-   On a timeout or lost browser result, read the existing item/status and match
-   the version before retrying. Do not create a second item or bump/repackage
-   merely to escape an unknown outcome.
+   On a timeout or lost browser result, compare the separate published and
+   submitted revisions, their versions/percentages and async-upload state.
+   Expired or missing upload state does not establish failure. Do not create a
+   second item or bump/repackage merely to escape an unknown outcome.
 8. Prove the requested surface. Public delivery requires the canonical Store
    listing in the intended region, correct publisher/version/permissions, a
    Store-origin install or update in a clean Chrome profile, restart, and the
    product-critical smoke. Trusted-tester delivery requires an eligible tester
-   install through the provider route, not a locally loaded directory.
+   install through the provider route, not a locally loaded directory. Bind
+   account-wide trusted testers plus item-specific groups; use a separately
+   identified and clearly labeled item when publishing a parallel beta.
 
 ## Failure Boundary
 

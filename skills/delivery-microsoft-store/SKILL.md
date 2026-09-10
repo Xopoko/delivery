@@ -2,8 +2,8 @@
 name: delivery-microsoft-store
 description: >-
   Deliver Windows 11 apps through Microsoft Store MSIX or hosted MSI/EXE: bind
-  identity and artifact, stage Partner Center, submit, recover certification,
-  and prove public acquisition. Excludes Windows app implementation.
+  identity and artifact, prepare the first listing, stage private tests, submit,
+  recover certification, and prove acquisition. Excludes app implementation.
 ---
 
 # Microsoft Store Delivery
@@ -20,21 +20,24 @@ Read both contracts before changing Partner Center state:
 
 The outcome is not "package uploaded" or "certification passed." It is the
 requested delivery effect, proved at its real boundary: a correct draft, a
-specific submitted artifact, or an anonymously visible and installable Store
-release.
+specific submitted artifact, or a Store release that the intended audience can
+acquire and install.
 
 ## Workflow
 
 1. **Recover intent and live state.** Classify the requested effect as
-   `stage`, `submit`, `release`, or `verify`. Read repository guidance and the
-   current Partner Center product/submission before assuming a first release or
-   update. Preserve Microsoft's raw status alongside the shared normalized
-   phase.
+   `prepare`, `stage`, `submit`, `release`, or `verify`. Preparation can finish
+   locally with unresolved provider facts named. Before a provider write, read
+   repository guidance and the current Partner Center product/submission before
+   assuming a first release or update. Preserve Microsoft's raw status alongside
+   the shared normalized phase.
 2. **Select the lane.** Keep Store-hosted MSIX/AppX packages, acquired through
    Microsoft Store/App Installer, separate from the hosted MSI/EXE installer
-   lane. The latter has a different submission API, publisher-hosted versioned
-   HTTPS installers, signing, and update semantics. Do not silently convert
-   between them.
+   lane for non-gaming PC apps. The latter has a different submission API,
+   publisher-hosted versioned HTTPS installers, signing, and update semantics.
+   Choose private audience, direct-link availability, or package flight from
+   the reference's distribution matrix; do not assume MSIX flight features
+   exist for hosted installers.
 3. **Bind target identity.** Record the Partner Center product ID, reserved
    product name, exact case-sensitive package `Identity` name and publisher,
    visible application ID and aliases, package version, architecture/device
@@ -54,7 +57,9 @@ release.
    WACK against the candidate when applicable; a hang or missing verdict is
    `undetermined`, never pass. Keep local certificate trust failures separate
    from Store certification. For hosted MSI/EXE, require a standalone/offline
-   installer and prove silent installation with the submitted EXE switches or
+   installer with the required signatures on the installer and its included PE
+   files. Bind architecture/language entries and custom EXE return-code handling
+   when used. Prove silent installation with the submitted EXE switches or
    default silent behavior, or MSI `/qn`, on an authorized test surface.
 6. **Stage a draft.** Prefer the project's already-working official tooling.
    When the Microsoft Store Developer CLI is present and supports this exact
@@ -64,15 +69,21 @@ release.
    Read and preserve required draft changes first, require authority covering
    replacement, and run an authorized upload before metadata edits. Use Partner
    Center or a supported existing-submission update when preserving the draft
-   is required. Use the UI for account/bootstrap, identity reservation, legal
-   declarations, and any field
-   the CLI/API cannot faithfully represent. Never install tooling or change its
-   global telemetry/auth configuration silently.
+   is required. Follow the reference's first-submission prerequisites and keep
+   one mutation surface for an API-created MSIX draft: Dashboard edits can
+   prevent later API commit. Complete unsupported declarations in the Dashboard
+   bootstrap or deliberately transfer the workflow there. Check the selected
+   tool's lane, pricing support and hidden create/delete behavior, including
+   `submission update`. Never install tooling or change its global
+   telemetry/auth configuration silently.
 7. **Read back and preview.** Re-read the draft from Partner Center or the
    official API. Show one exact final preview containing product, artifact hash,
    identity/version, listing/markets, visibility, price, schedule or publishing
    hold, declared capabilities, and the next external effect. Route unresolved
    attestations and consequential choices through the shared human checkpoint.
+   For gated features, verify working reviewer access and concise test steps
+   through the protected provider field. Distinguish an earliest publishing
+   start from actual customer availability.
 8. **Commit once and observe.** After authority is satisfied, submit or publish
    exactly once, capture the returned submission identity/state, and re-read it.
    A timeout is unknown outcome: query status before any retry. Never replace,
@@ -81,6 +92,8 @@ release.
    certification, release, publishing, and `In the Store`. For a public release,
    verify the anonymous listing and acquisition path, then proportionally prove
    Store install, launch, alias behavior, update, and uninstall on Windows 11.
+   For private delivery, use the authenticated private-product link and an
+   eligible personal Microsoft account, then verify the delivered package.
    Do not call `In certification` public or done. Start a recurring watcher only
    when the user explicitly asks to wait, monitor, babysit, or finish through
    asynchronous review; suppress unchanged observations, continue through

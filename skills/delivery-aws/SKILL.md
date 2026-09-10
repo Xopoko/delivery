@@ -13,6 +13,9 @@ site, or deployment state. It composes `delivery-web` when a website/API
 and edge route are part of the outcome. Read the
 [shared control contract](../../references/delivery-control-contract.md) and
 [AWS delivery reference](../../references/aws-delivery.md).
+Then load only the relevant branch of
+[service release flows](../../references/aws-service-release-flows.md) for ECS,
+Lambda, stacks, static delivery or Lightsail/CodeDeploy.
 
 ## Deliver Through The Existing AWS Owner
 
@@ -42,7 +45,10 @@ and edge route are part of the outcome. Read the
    downtime, migration compatibility, and cost delta. AWS Budgets alert; they
    do not guarantee a hard cap or healthy release.
 5. Prefer a reversible stage or zero-traffic revision when supported. Verify
-   service health before traffic. For a single in-place host, take the
+   service health before traffic. Bind the exact transition: registered task
+   definition versus running task, updated function versus published version
+   versus alias, or prepared versus executed change set. On a first release,
+   record that no earlier healthy revision exists. For a single in-place host, take the
    project-defined backup, dry-run the file/config transition, keep secrets and
    mutable data outside the release snapshot, and prove the prior revision can
    actually be redeployed or restored.
@@ -64,7 +70,10 @@ and edge route are part of the outcome. Read the
    public or private endpoint and authorization boundary. For protected content,
    verify authorized consumer access and expected denial to unauthorized
    requests; do not add a public endpoint or weaken access controls to obtain
-   proof. A green AWS deployment alone is not product delivery.
+   proof. In particular, check Lambda's update result as well as `State`, the
+   actual ECS task digests, and the active Lightsail deployment version: a
+   failed update can leave old code healthy. A green deployment alone is not
+   product delivery.
 
 ## Recovery Boundary
 

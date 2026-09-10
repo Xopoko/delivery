@@ -7,8 +7,10 @@ before a consequential action because Partner Center fields, policies, CLI
 coverage, and review behavior can change.
 The MSI/EXE silent-install and standalone/offline-installer requirements were
 rechecked against Microsoft's package and certification pages on **2026-09-07**.
-The CLI's pending-draft replacement and `--noCommit` semantics were rechecked
-against Microsoft's command documentation on **2026-09-10**.
+The first-submission, audience, hosted-installer, API writer and publishing-hold
+guidance was refreshed on **2026-09-10**, including the CLI's pending-draft
+replacement and `--noCommit` semantics. Sources beside each section distinguish
+provider rules from behavior of an optional tool.
 
 ## Completion Contract
 
@@ -21,8 +23,8 @@ status and observation time:
 | Pre-processing or In certification | `submitted` / `in_review` | The exact submission entered Microsoft's pipeline; nothing is public yet |
 | Certification passed or release-ready | `approved` | Review passed; publication and customer visibility remain unproved |
 | Publishing | `processing` | Publication is in progress; customer acquisition remains unproved |
-| In the Store | `released` | Partner Center reports Store release; anonymous visibility and installation still need direct proof |
-| Anonymous listing plus Store acquisition/install proof | `verified` | The requested customer-facing boundary was observed |
+| In the Store | `released` | Partner Center reports Store release; intended-audience availability and installation still need direct proof |
+| Intended audience can view, acquire and install the Store version | `verified` | The requested customer-facing boundary was observed; public listings also have anonymous proof |
 | Certification report with failure | `rejected` | This submission failed with a concrete report; it is a valid terminal observation, not a reason to erase history |
 
 Do not compress these into a single "published" boolean. Record `observed_at`,
@@ -82,7 +84,8 @@ justification through a human-reviewed declaration.
 
 ### Publisher-hosted MSI/EXE
 
-This is a separate Store lane, not an alternate filename for the MSIX API.
+This is a separate Store lane for non-gaming PC products, not an alternate
+filename for the MSIX API.
 Microsoft downloads an `.msi` or `.exe` from a publisher-hosted URL and does not
 re-sign that installer. Use the current MSI/EXE Partner Center flow, Developer
 CLI commands, or the dedicated Microsoft Store submission API only after
@@ -94,8 +97,9 @@ Before staging:
 - require the URL to resolve directly to the intended `.msi` or `.exe`, not an
   HTML landing page, authentication wall, mutable `latest` path, or redirect to
   unrelated content;
-- Authenticode-sign the installer under the publisher's approved certificate
-  custody and verify the signature without exposing certificate secrets;
+- verify code-signing signatures on the installer and all included Portable
+  Executable (PE) files, with a chain to a CA in the Microsoft Trusted Root
+  Program; use approved certificate custody without exposing private material;
 - hash the local installer, download the staged URL to a bounded temporary
   location, and require byte-for-byte SHA-256 equality;
 - require a standalone/offline installer containing the submitted application
@@ -108,6 +112,16 @@ Before staging:
   elevation and physical-control checkpoints still apply;
 - never change bytes at a submitted URL. Publish a new versioned URL and create
   a new submission for changed bytes.
+
+Bind each package's architecture, supported languages, URL/hash and installer
+type separately. For EXE installers that use custom return codes, map the
+tested success, cancellation, reboot or failure results to the Store's handling
+fields and provide error documentation where needed. These mappings improve
+customer diagnostics; do not invent return codes or require optional mappings
+from an installer that does not use them. Silent installation can still invoke
+UAC; it does not authorize the agent to accept elevation. See
+[policy 10.2.9](https://learn.microsoft.com/en-us/windows/apps/publish/store-policies)
+and [MSI/EXE package fields](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msi/upload-app-packages).
 
 The MSI/EXE submission API uses Microsoft Entra application authentication and
 is operationally distinct from the MSIX service. Do not introduce a service
@@ -196,6 +210,23 @@ for the agent to guess. Privacy collection, age/content answers, paid terms,
 restricted-capability purpose, agreements, and reviewer-account instructions
 need human attestation or a verified existing canonical source.
 
+For a first listing, assemble one release packet: product identity, exact
+package receipt, supported languages/markets, required copy and exported assets,
+declaration answers with their evidence, and outstanding owner decisions. Reuse
+the project's existing release documents; local preparation does not require a
+provider object. Before creating an app, reconcile the existing Partner Center
+products and name reservations. Then follow the
+[first MSIX submission sequence](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/create-app-submission)
+under the shared authority contract.
+
+Reviewer notes should describe the shortest path to locked features, relevant
+regional behavior and what changed. If sign-in is required, supply a working
+demo account through the protected Notes for certification field and keep the
+backend available during review. Record that access was verified, never the
+credential values. Public listing text and reviewer-only instructions are
+separate artifacts. See [testability policy 10.3](https://learn.microsoft.com/en-us/windows/apps/publish/store-policies)
+and [certification notes](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/manage-submission-options).
+
 For screenshots, capture in physical pixels on the target display, then inspect
 the final exported files at 100%. Mixed-DPI Windows desktops can make logical
 coordinates crop the wrong region. Reject screenshots containing unrelated
@@ -216,11 +247,30 @@ assuming that unpublishing will restore private-product semantics.
 
 ## Flights And Gradual Rollout
 
+Choose the MSIX distribution route before the first release:
+
+| Intended result | Route and proof |
+| --- | --- |
+| Confidential first beta | Private audience; verify known-user membership, the authenticated private-product link and tester acquisition |
+| Available to anyone with a link | Public audience with restricted discoverability; a direct link still permits access and is not a privacy boundary |
+| Test a package update after initial publication | Package flight; bind tester group, package/rank and delivered version while preserving the base listing |
+
+Private-audience testers need personal Microsoft accounts matching the known
+user group; Entra work/school accounts do not substitute. Use the private link
+from the product identity page. Removing a tester does not remove an installed
+copy. Package flights can also target subsets of an already-published private
+audience. These are MSIX mechanisms; do not assume the MSI/EXE lane supports
+them. See [visibility](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/visibility-options)
+and [testing routes](https://learn.microsoft.com/en-us/windows/apps/publish/beta-testing-and-targeted-distribution).
+
 Package flights are separate distribution objects. Bind the flight, tester
 group, ranking/priority, device-family ceiling, package versions and flight
 certification state. A higher-ranked applicable flight can supersede another;
 flight availability is not base-submission availability. Prove a real eligible
 Windows 11 Store update from the intended flight.
+When promoting a tested flight to the base submission, reuse its exact package
+through the supported [package-copy path](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/upload-app-packages)
+and rebind the broader audience. A rebuild needs new artifact proof.
 
 Gradual package rollout applies to package updates; listing changes still reach
 the full audience. Bind the live percentage and package set. Reaching 100% does
@@ -237,11 +287,28 @@ the selected API. Prefer an already-working project-native tool path for
 repeatable updates; do not add CI, an Entra app, or a new packaging stack merely
 because automation exists.
 
+For the MSIX submission API, Microsoft requires an initial submission created
+in Partner Center, including the age-rating questionnaire. This is not a
+requirement to release publicly first. Once the API creates a submission, keep
+its subsequent changes in that API: editing it in Partner Center can prevent
+later API edit/commit and leave it unable to proceed. If an unsupported field
+forces a change of surface, deliberately finish through the Dashboard where
+supported; do not return to API commit assuming compatibility. Any required
+delete/recreate recovery retains its own exact checkpoint.
+
+Check product compatibility before choosing the API. Mandatory app updates and
+Store-managed consumables are unsupported in the documented MSIX submission
+API. Pricing Version 2 requires Partner Center for Pricing and availability,
+though other modules can still use the API. Metadata-only changes can reuse an
+unchanged package. See the [API prerequisites and limits](https://learn.microsoft.com/en-us/windows/uwp/monetize/create-and-manage-submissions-using-windows-store-services)
+and [update guidance](https://learn.microsoft.com/en-us/windows/apps/publish/faq/manage-and-update-your-app).
+
 When `msstore` is already available:
 
 1. Record its version and feature-probe `msstore --help` and the exact command's
    help. The Developer CLI is a changing surface and MSIX versus MSI/EXE command
-   coverage differs.
+   coverage differs. An existing `winapp store` wrapper still needs the same
+   underlying lane and effect checks.
 2. Use read-only commands such as submission status/get before mutations.
 3. For the MSIX `publish` path, use the exact `--inputFile` and `--appId`, plus
    `--noCommit` to skip committing, only when current help confirms them. Never
@@ -253,11 +320,21 @@ When `msstore` is already available:
    and require authority explicitly covering replacement. If the draft must
    remain, use Partner Center or a supported existing-submission update against
    fresh current state. For an authorized replacement, upload before editing
-   metadata, then restore the intended changes to the new draft.
-4. Read the complete draft back from Partner Center. CLI exit zero proves only
-   command completion, not that the intended hash, listing, or release options
-   are staged.
-5. Invoke a commit/publish command only after the exact final preview and
+   metadata through the same compatible mutation surface, then restore the
+   intended changes to the new draft.
+4. Do not assume `submission update` is nondestructive because of its name.
+   Check current lane/pricing support and whether it creates a missing draft
+   or deletes one on an unsupported path. The
+   [inspected CLI implementation](https://github.com/microsoft/msstore-cli/blob/901c6f3e515339c614fff6afa0454013727a12cd/MSStore.CLI/Commands/Submission/UpdateCommand.cs)
+   does both. Use the Dashboard if these effects cannot be safely bound. For
+   supported MSI/EXE updates, read the current package JSON, change only the
+   intended fields and use a current supported file/stdin payload mechanism;
+   do not construct stale JSON from an example. See
+   [MSI/EXE commands](https://learn.microsoft.com/en-us/windows/apps/publish/msstore-dev-cli/commands-exe).
+5. Read the complete draft back from its authoritative surface. CLI exit zero
+   proves only command completion, not that the intended hash, listing, or
+   release options are staged.
+6. Invoke a commit/publish command only after the exact final preview and
    authority checkpoint. Read status again immediately afterward.
 
 Tenant, client, and seller IDs are account identifiers; keep any required
@@ -289,6 +366,17 @@ An explicit user instruction already authorizing this exact target, artifact,
 and public/review effect may satisfy the shared consequential-action contract.
 Otherwise use the host's approval surface; do not ask the user to reconstruct
 the preview from several messages.
+
+### Publishing hold and customer availability
+
+Keep a manual publishing hold, an earliest publishing-start date and the
+customer availability schedule distinct. Manual hold waits for a later publish
+action. A dated hold starts publishing no earlier than that time; certification
+and processing can make availability later. Read back the provider's timezone,
+market schedule and release mode, and record their UTC interpretation. A
+publishing-start date currently must be at least 24 hours ahead and can change
+only before the submission enters Publish. Do not report a scheduled time as
+observed availability. See [publishing hold options](https://learn.microsoft.com/en-us/windows/apps/publish/publish-your-app/msix/manage-submission-options).
 
 ## Human Checkpoints
 
@@ -330,10 +418,16 @@ entered, agreements were accepted, or Partner Center committed the transition.
 ## Customer-Surface Proof
 
 After Partner Center reports `In the Store`, use a signed-out/private browser to
-open the canonical listing in each material market. Confirm publisher/product
-identity, acquisition availability, screenshots, privacy/support links, and
-intended audience/price. A dashboard status alone cannot prove regional or
-anonymous discoverability.
+open a public release's canonical listing in each material market. Confirm
+publisher/product identity, acquisition availability, screenshots,
+privacy/support links, and intended audience/price. A dashboard status alone
+cannot prove regional or anonymous discoverability.
+
+For private-audience or flight delivery, use the eligible tester and provider
+acquisition route instead. Record the intended audience, observed package
+version and result without storing tester email addresses. A public base
+listing or an anonymous access denial cannot prove that the flight reached its
+testers.
 
 On an appropriate clean Windows 11 surface, acquire the app through Microsoft
 Store rather than sideloading the pre-submission package. Record Store-delivered
@@ -349,7 +443,8 @@ gone. A source-build alias or pre-existing PATH entry is not Store lifecycle
 proof.
 
 Treat the Store listing, privacy/support URLs, and companion product website as
-independently mutable public objects. Verify each anonymously. A stale companion
+independently mutable objects. Verify public pages anonymously and a gated listing
+through its intended audience's access. A stale companion
 site does not negate a proved Store release, but it limits the overall delivery
 claim and should be corrected through `delivery-web` under its own exact effect
 and authority.
@@ -361,7 +456,8 @@ poll is a separate requested effect: start one only when the user explicitly
 asks to wait, monitor, babysit, or finish through review. Follow the shared
 watcher contract: suppress unchanged observations, allow meaningful intermediate
 notifications to continue toward the requested terminal, capture final
-authoritative and anonymous proof, and then remove the completed watcher.
+authoritative and intended-audience proof, plus anonymous proof for public
+releases, and then remove the completed watcher.
 
 ## Microsoft Primary Sources
 

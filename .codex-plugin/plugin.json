@@ -1,6 +1,6 @@
 {
   "name": "delivery",
-  "version": "0.3.3",
+  "version": "0.4.0",
   "description": "Release workflows for apps, extensions, social posts, video, websites, and AWS. Bind the artifact, stage safely, recover uncertain effects, and verify the result.",
   "author": {
     "name": "Xopoko"
@@ -41,7 +41,7 @@
       "Chrome Web Store package, privacy, review, rollout, rollback, and install delivery",
       "LinkedIn and X evidence-backed post preparation, publication, reconciliation, and canonical proof",
       "YouTube and Shorts private upload, processing, scheduling, publication, and watch-surface proof",
-      "Website and API origin, Cloudflare Tunnel, DNS, TLS, traffic cutover, and public-path delivery",
+      "Managed website and API builds, Cloudflare Workers and Pages, origin and Tunnel, DNS, TLS, traffic cutover, and consumer proof",
       "AWS service revision, health, traffic, recovery, and consumer-path delivery",
       "Exact artifact hashing, stable provider identity, and minimal nonsensitive receipts",
       "Draft, internal, private, review, release, and public-state separation",

@@ -1,9 +1,9 @@
 ---
 name: delivery-web
 description: >-
-  Deliver a website or API on an existing host: bind revision, origin,
-  process, data, DNS, TLS and Cloudflare ingress; deploy once, recover safely,
-  and prove intended consumer access. Excludes implementation and cloud
+  Deliver a website or API through an existing managed platform or host:
+  bind build environment, revision, deployment, data, DNS, TLS and traffic;
+  recover safely and prove consumer access. Excludes implementation and cloud
   architecture redesign.
 ---
 
@@ -15,13 +15,15 @@ Cloudflare Tunnel, reverse proxy, static host, or project-owned platform. When
 AWS owns the compute or managed service, compose `delivery-aws`. Read the
 [shared control contract](../../references/delivery-control-contract.md) and
 [web production reference](../../references/web-production-delivery.md).
+For Pages, Workers, Vercel or Netlify, load the matching branch of
+[managed platform releases](../../references/web-managed-platforms.md).
 
 ## Deliver
 
 1. Define the terminal effect: prepare a deployable revision, stage an origin,
    deploy production, cut over traffic, recover, or verify. Bind the canonical
-   hostname and user path, owner/provider account, origin host, environment,
-   process/service, listener, ingress/tunnel/proxy, DNS zone/record, TLS mode,
+   hostname and user path, owner/provider account, managed project or origin,
+   environment, applicable service/listener/ingress, DNS zone/record, TLS mode,
    data stores, release mode, intended audience and access controls, and current
    live revision. Similar hostnames or containers are not identity.
 2. Bind one immutable release input: exact source revision or source archive,
@@ -29,8 +31,11 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
    dependency lock, migration revision, public asset manifest, and secret
    references without values. Never deploy an unexamined mutable working tree,
    `latest` image, or locally generated file under an old receipt.
-3. Read project-native deployment docs and live topology. Prove clean or
-   intentionally captured source, disk/capacity, backup/restore readiness,
+3. Read project-native deployment docs and live topology. Select managed hosting
+   versus a self-operated origin. For managed hosting, bind project/team,
+   production branch, build context, output directory and framework adapter;
+   verify automatic deploy/domain behavior. Do not require SSH or listeners.
+   For an operated host, prove clean or intentionally captured source, disk/capacity, backup/restore readiness,
    secret custody, dependency availability, process ownership, port binding,
    health endpoint, logs, firewall, ingress match, DNS/TLS, monitoring and an
    executable known-good recovery. Use dry-run diff/sync or provider preview
@@ -38,7 +43,9 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
 4. Stage where the topology permits: build and inspect offline, deploy a new
    version alongside old, or start behind a nonpublic/zero-traffic route. Run
    origin-level health and product-critical smoke before traffic cutover. A
-   process that merely started is not healthy.
+   process that merely started is not healthy. A preview can be public or use
+   production services; bind that access before uploading. Capture the exact
+   build environment and immutable deployment URL separately from moving aliases.
 5. For Cloudflare Tunnel production, bind the existing tunnel and its management
    mode. For a locally managed tunnel, validate its actual ingress configuration,
    rule matching, and final catch-all. For a remotely managed tunnel, inspect
@@ -64,6 +71,8 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
    any repeat. Do not alternate between SSH, CI and dashboard writers.
 8. Prove both boundaries: origin/service health from its trust boundary, then
    the intended consumer path through DNS, TLS, edge/tunnel/proxy and cache.
+   On managed platforms verify the current domain points to the intended build;
+   test a direct deep link, required assets and the critical API/function path.
    For public content, verify anonymous access. For protected content, verify
    the expected anonymous denial or sign-in challenge where reachable, then
    use an authorized consumer session or client to identify the exact release

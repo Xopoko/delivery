@@ -96,13 +96,17 @@ Use `delivery` for a broad request. It routes the work to the relevant channel.
 | [`delivery-chrome-web-store`](skills/delivery-chrome-web-store/SKILL.md) | Chrome Web Store | Package and privacy readiness, review, rollout, install proof |
 | [`delivery-social`](skills/delivery-social/SKILL.md) | LinkedIn and X | Evidence-backed payloads, exact publication scope, canonical post verification |
 | [`delivery-youtube`](skills/delivery-youtube/SKILL.md) | YouTube and Shorts | Private upload, processing, metadata, visibility, playback |
-| [`delivery-web`](skills/delivery-web/SKILL.md) | Websites and APIs | Deployment revision, origin, DNS, TLS, traffic, recovery |
+| [`delivery-web`](skills/delivery-web/SKILL.md) | Websites and APIs | Managed hosts and origins, build context, DNS, TLS, traffic, recovery |
 | [`delivery-aws`](skills/delivery-aws/SKILL.md) | Existing AWS services | Resource identity, deployment health, traffic, recovery, consumer path |
 
 These are workflow skills, not bundled integrations. Available actions depend
 on the agent host, the project's tools, provider permissions, and current
 provider requirements. Platform references link to official documentation;
 mutable requirements must be checked at delivery time.
+
+The [channel coverage guide](docs/CHANNEL-COVERAGE.md) maps first delivery,
+updates, recovery and consumer evidence across the seven non-Apple channels,
+with direct links to the relevant runbooks.
 
 ## Try it without a provider account
 
