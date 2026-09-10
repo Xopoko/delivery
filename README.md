@@ -2,48 +2,42 @@
   <img src="assets/platforms-transparent.png" width="400" alt="Delivery destinations: YouTube, AWS, Apple, Google Play, and Windows">
 </p>
 
-<h1 align="center">Delivery</h1>
+<h1 align="center">Delivery Skills</h1>
 
 <p align="center">
-  <strong>From a finished artifact to a verified release.</strong>
+  Skills for app releases, publishing, and deployment with <strong>Codex</strong>.
 </p>
 
 <p align="center">
-  Agent skills for <strong>Codex</strong> and <strong>Claude Code</strong>
-  &middot; <a href="LICENSE">MIT</a>
-  &middot; <a href="docs/INSTALL.md">Install</a>
+  <a href="docs/INSTALL.md">Install</a>
+  &middot; <a href="#skill-map">Skills</a>
   &middot; <a href="docs/WALKTHROUGH.md">Try the demo</a>
+  &middot; <a href="LICENSE">MIT</a>
 </p>
 
-The build is ready. The work ends when the intended audience can use it.
+Delivery Skills helps Codex release apps to stores, publish videos and social
+posts, and deploy websites and AWS services. The skills cover preparation,
+submission, release checks, and recovery when an upload or deployment goes wrong.
 
-Delivery gives your agent a practical workflow for that last mile: bind the
-exact artifact and destination, prepare the channel, carry out the authorized
-transition, recover from uncertain responses, and verify the result where
-users will see it.
+Developed and tested with Codex, and installed as a plugin. A Claude Code
+package is also included; see [host compatibility](docs/INSTALL.md#host-compatibility)
+for what has been checked.
 
-It contains **nine skills**, provider references, and an optional Python
-receipt helper. Your agent uses the project tools and provider access you
-already have. Delivery itself ships no provider clients, credentials, browser
-automation, background service, or hosted infrastructure.
+The package contains skills, provider guides, and an optional Python helper
+for recording delivery progress. Your agent uses your existing project tools
+and provider accounts.
 
-## What changes in a delivery task
+## What the skills help with
 
-| Situation | Delivery's operating rule |
+| Situation | What the agent checks |
 | --- | --- |
-| Several builds or similarly named targets exist | Bind the artifact digest, provider account, target, and intended audience before writing. |
-| An upload returns a timeout | Read the provider's state for the same object before considering a retry. |
-| A store says “approved” | Preserve that state; separately verify release and installation when those are the goal. |
-| A release crosses sessions | Resume from live provider state, with a minimal local receipt when useful. |
-| A draft is ready for publication | Check the exact payload and destination against the user's authorization. |
+| Several builds or similarly named targets exist | The build, account, destination, and audience match the request. |
+| An upload times out | Whether the provider received it, before retrying. |
+| A store says “approved” | Whether the app is actually released and installable, if that is the goal. |
+| Work resumes in a new session | What the provider has already completed and what remains. |
+| A draft is ready | The content and destination match what the user authorized. |
 
-The skills distinguish preparation, staging, submission, release, and user-visible
-verification. A receipt can help remember what happened; the provider and the
-actual consumer surface determine what happened.
-
-## Quick start
-
-### Codex
+## Install in Codex
 
 ```bash
 codex plugin marketplace add Xopoko/delivery
@@ -51,17 +45,10 @@ codex plugin add delivery@delivery
 codex plugin list --marketplace delivery
 ```
 
-### Claude Code
+Start a fresh session after installation. See [installation and updates](docs/INSTALL.md)
+for requirements, local checkouts, and [Claude Code](docs/INSTALL.md#claude-code).
 
-```bash
-claude plugin marketplace add Xopoko/delivery
-claude plugin install delivery@delivery
-claude plugin list
-```
-
-Start a fresh session after installation. Keep the complete package together:
-the skills use the bundled references. See [installation and updates](docs/INSTALL.md)
-for local checkouts, removal, prerequisites, and verification boundaries.
+## Usage
 
 Then ask your agent:
 
@@ -104,9 +91,9 @@ on the agent host, the project's tools, provider permissions, and current
 provider requirements. Platform references link to official documentation;
 mutable requirements must be checked at delivery time.
 
-The [channel coverage guide](docs/CHANNEL-COVERAGE.md) maps first delivery,
-updates, recovery and consumer evidence across the seven non-Apple channels,
-with direct links to the relevant runbooks.
+The [channel coverage guide](docs/CHANNEL-COVERAGE.md) covers first delivery,
+updates, recovery, and verification for the non-Apple channels, with links to
+their guides. Apple workflows are covered in the [Apple guide](references/apple-delivery.md).
 
 ## Try it without a provider account
 
@@ -126,7 +113,7 @@ for changed inputs. It stores no approval grant and makes no provider calls.
 Keep real receipts in your own private state directory outside this repository.
 See the [receipt guide](docs/RECEIPTS.md).
 
-## Designed for explicit outcomes
+## Permissions and verification
 
 Delivery keeps the final effect within the user's authorization. It prepares
 reviewable work before requesting a missing decision, protects sign-in and

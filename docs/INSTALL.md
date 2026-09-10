@@ -1,8 +1,18 @@
-# Install Delivery
+# Install Delivery Skills
 
-Delivery packages nine Agent Skills for Codex and Claude Code. Installing it
-adds instructions and reference material to your agent. Provider tools and
-account access are supplied separately by your environment.
+Delivery Skills is developed and tested with Codex and installed as a plugin.
+Installing it adds instructions and provider guides to your agent. Provider
+tools and account access are supplied separately by your environment.
+
+## Host compatibility
+
+Codex is the primary development and testing host. Installation and skill
+discovery have been checked in a fresh Codex runtime.
+
+A Claude Code package is included. Its manifest and installation command syntax
+have been validated; runtime loading and delivery workflows have not been tested
+in Claude Code. Other agents may use the skills if they support the format and
+can resolve the bundled resources.
 
 ## Requirements
 
@@ -76,13 +86,13 @@ repository does not claim a native installer for other hosts.
 ## Verify discovery
 
 Start a fresh agent session after installing or updating. Check the host's
-plugin inventory for Delivery and ask:
+plugin inventory for Delivery Skills and ask:
 
-> Confirm that Delivery is available. List its nine skills, open its bundled
+> Confirm that Delivery Skills is available. List its skills, open its bundled
 > delivery control contract, and explain how it handles a timed-out upload.
 > This is an installation check; do not contact or change a provider.
 
-The host should discover the router and eight channel skills listed in the
+The host should discover the router and channel skills listed in the
 [README](../README.md#skill-map), and resolve the bundled contract. A package
 validator passing proves the source structure; the host inventory and resource
 read establish that the installed plugin is usable in that session.

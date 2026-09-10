@@ -3,6 +3,13 @@
 Notable changes are recorded here. A version entry describes the source;
 available release tags and assets are listed on GitHub separately.
 
+## 0.4.1
+
+- Use Delivery Skills as the display name and simplify the README and plugin
+  descriptions. Keep the repository and installation identifier `delivery`.
+- Make Codex the primary host in the documentation, state the extent of Claude
+  Code checks, and remove fixed skill totals from current descriptions.
+
 ## 0.4.0
 
 - Expand all seven non-Apple delivery channels with current first-release,

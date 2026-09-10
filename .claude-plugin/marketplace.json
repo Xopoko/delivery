@@ -4,14 +4,14 @@
     "name": "Xopoko"
   },
   "metadata": {
-    "description": "Portable release workflows with exact artifact identity and evidence."
+    "description": "Delivery Skills for app releases, publishing, and deployment. Developed and tested with Codex."
   },
   "plugins": [
     {
       "name": "delivery",
       "source": "./",
-      "description": "Release workflows for apps, content, web, and cloud.",
-      "version": "0.4.0",
+      "description": "Skills for app releases, social posts, YouTube uploads, and web and AWS deployments. Developed and tested with Codex.",
+      "version": "0.4.1",
       "repository": "https://github.com/Xopoko/delivery",
       "license": "MIT"
     }

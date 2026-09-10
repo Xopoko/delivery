@@ -1,7 +1,7 @@
 {
   "name": "delivery",
   "interface": {
-    "displayName": "Delivery"
+    "displayName": "Delivery Skills"
   },
   "plugins": [
     {

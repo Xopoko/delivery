@@ -1,4 +1,4 @@
-# Contributing to Delivery
+# Contributing to Delivery Skills
 
 Delivery welcomes focused improvements to delivery workflows, current official
 references, receipt correctness, and documentation. Start with a concrete
@@ -22,7 +22,7 @@ python scripts/demo.py
 Keep test fixtures fictional. Tests must not need an account, network access,
 secret, installed provider CLI, or particular user's filesystem.
 
-## Keep the package portable
+## Keep the package independent of the local environment
 
 Skills should resolve bundled resources relative to the installed package.
 Do not add absolute workstation paths, organization-specific infrastructure,

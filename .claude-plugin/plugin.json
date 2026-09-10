@@ -1,7 +1,7 @@
 {
   "name": "delivery",
-  "version": "0.4.0",
-  "description": "Release workflows for apps, extensions, social posts, video, websites, and AWS. Bind the artifact, stage safely, recover uncertain effects, and verify the result.",
+  "version": "0.4.1",
+  "description": "Skills for app releases, social posts, YouTube uploads, and web and AWS deployments. Developed and tested with Codex.",
   "author": {
     "name": "Xopoko"
   },
