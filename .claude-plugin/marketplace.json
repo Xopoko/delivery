@@ -1,0 +1,19 @@
+{
+  "name": "delivery",
+  "owner": {
+    "name": "Xopoko"
+  },
+  "metadata": {
+    "description": "Portable release workflows with exact artifact identity and evidence."
+  },
+  "plugins": [
+    {
+      "name": "delivery",
+      "source": "./",
+      "description": "Release workflows for apps, content, web, and cloud.",
+      "version": "0.3.0",
+      "repository": "https://github.com/Xopoko/delivery",
+      "license": "MIT"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Microsoft Store"
+  short_description: "Delivery Microsoft Store: run focused tasks"
+policy:
+  allow_implicit_invocation: false

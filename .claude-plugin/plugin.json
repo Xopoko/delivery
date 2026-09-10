@@ -1,0 +1,29 @@
+{
+  "name": "delivery",
+  "version": "0.3.0",
+  "description": "Release workflows for apps, extensions, social posts, video, websites, and AWS. Bind the artifact, stage safely, recover uncertain effects, and verify the result.",
+  "author": {
+    "name": "Xopoko"
+  },
+  "license": "MIT",
+  "keywords": [
+    "delivery",
+    "release",
+    "app-store-connect",
+    "google-play",
+    "microsoft-store",
+    "chrome-web-store",
+    "linkedin",
+    "x",
+    "youtube",
+    "cloudflare",
+    "aws",
+    "testflight",
+    "publishing",
+    "distribution",
+    "artifact-provenance",
+    "review-recovery"
+  ],
+  "homepage": "https://github.com/Xopoko/delivery",
+  "repository": "https://github.com/Xopoko/delivery"
+}

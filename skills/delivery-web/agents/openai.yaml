@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Web"
+  short_description: "Delivery Web: run focused tasks"
+policy:
+  allow_implicit_invocation: false

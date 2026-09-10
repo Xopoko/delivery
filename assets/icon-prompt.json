@@ -1,0 +1,18 @@
+{
+  "schema": "delivery.icon-prompt.v1",
+  "concept": "One product, many destinations",
+  "description": "Five broad colored ribbons share one flowing stem, suggesting an open hand and a connection to many platforms.",
+  "palette": [
+    "#10141F",
+    "coral",
+    "tangerine",
+    "ivory",
+    "periwinkle",
+    "electric blue"
+  ],
+  "style": "Matte sculptural ribbon mark with a clear silhouette and dark background.",
+  "generation": "Generated with OpenAI image generation, then refined with the same tool for an opaque background and clean edges.",
+  "trademarks": "Original symbol. No platform or third-party logos.",
+  "license": "Distributed under the repository MIT license.",
+  "asset": "assets/icon.png"
+}

@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Aws"
+  short_description: "Delivery Aws: run focused tasks"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,22 @@
+name: Workflow improvement
+description: Propose a focused improvement backed by an observable problem.
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What delivery problem does this solve?
+      description: Describe a concrete task and where the current behavior falls short. Keep examples fictional.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Proposed outcome
+      description: Describe the resulting agent behavior and how someone could verify it.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Evidence or official sources
+      description: Link current official documentation when provider behavior is involved.

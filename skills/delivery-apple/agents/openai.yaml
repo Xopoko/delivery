@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Apple"
+  short_description: "Delivery Apple: run focused tasks"
+policy:
+  allow_implicit_invocation: false

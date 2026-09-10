@@ -1,0 +1,32 @@
+name: Bug report
+description: Report incorrect package, receipt, or workflow behavior.
+body:
+  - type: markdown
+    attributes:
+      value: "Use fictional data. Do not include credentials, private provider responses, or real delivery receipts. Report vulnerabilities through SECURITY.md."
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Include the agent host and version if the issue concerns installation or skill discovery.
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and observed behavior
+      description: Describe the specific incorrect action, output, or instruction.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Provide safe steps or a fictional fixture. Include the relevant command when applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and limits
+      description: Add redacted output or official provider documentation. Say which live behavior, if any, you verified.

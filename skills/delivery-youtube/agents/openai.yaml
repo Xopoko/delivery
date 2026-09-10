@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Youtube"
+  short_description: "Delivery Youtube: run focused tasks"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,60 @@
+{
+  "name": "delivery",
+  "version": "0.3.0",
+  "description": "Release workflows for apps, extensions, social posts, video, websites, and AWS. Bind the artifact, stage safely, recover uncertain effects, and verify the result.",
+  "author": {
+    "name": "Xopoko"
+  },
+  "repository": "https://github.com/Xopoko/delivery",
+  "license": "MIT",
+  "keywords": [
+    "delivery",
+    "release",
+    "app-store-connect",
+    "google-play",
+    "microsoft-store",
+    "chrome-web-store",
+    "linkedin",
+    "x",
+    "youtube",
+    "cloudflare",
+    "aws",
+    "testflight",
+    "publishing",
+    "distribution",
+    "artifact-provenance",
+    "review-recovery"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Delivery",
+    "shortDescription": "Deliver products to stores, social, video, web, and cloud.",
+    "longDescription": "Nine focused skills guide an agent from a build-ready artifact to a verified distribution state. Delivery composes available provider tools, preserves exact artifact and target identity, reconciles uncertain writes before retrying, and keeps preparation, review, release, and verification distinct. Includes an optional local Python receipt helper; no provider connectors or accounts are bundled.",
+    "developerName": "Xopoko",
+    "category": "Coding",
+    "websiteURL": "https://github.com/Xopoko/delivery",
+    "capabilities": [
+      "Cross-channel delivery routing and resumable state recovery",
+      "Apple App Store, TestFlight, Mac App Store, and notarized macOS delivery orchestration",
+      "Google Play app signing, testing-track, review, rollout, and listing delivery",
+      "Microsoft Store MSIX and EXE or MSI submission, certification, and lifecycle delivery",
+      "Chrome Web Store package, privacy, review, rollout, rollback, and install delivery",
+      "LinkedIn and X evidence-backed post preparation, publication, reconciliation, and canonical proof",
+      "YouTube and Shorts private upload, processing, scheduling, publication, and watch-surface proof",
+      "Website and API origin, Cloudflare Tunnel, DNS, TLS, traffic cutover, and public-path delivery",
+      "AWS service revision, health, traffic, recovery, and consumer-path delivery",
+      "Exact artifact hashing, stable provider identity, and minimal nonsensitive receipts",
+      "Draft, internal, private, review, release, and public-state separation",
+      "Read-only reconciliation after ambiguous provider effects",
+      "Host-native approval, protected credentials, and project-native tool selection"
+    ],
+    "defaultPrompt": [
+      "Deliver this build-ready artifact to its intended channel and prove the resulting external state.",
+      "Resume this store, social, video, web, or AWS delivery from live provider state without duplicating completed effects."
+    ],
+    "brandColor": "#10141F",
+    "composerIcon": "./assets/icon.png",
+    "logo": "./assets/icon.png"
+  },
+  "homepage": "https://github.com/Xopoko/delivery"
+}

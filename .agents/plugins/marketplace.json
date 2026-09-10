@@ -1,0 +1,20 @@
+{
+  "name": "delivery",
+  "interface": {
+    "displayName": "Delivery"
+  },
+  "plugins": [
+    {
+      "name": "delivery",
+      "source": {
+        "source": "local",
+        "path": "."
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+  ]
+}

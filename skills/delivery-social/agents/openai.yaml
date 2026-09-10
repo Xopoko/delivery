@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Social"
+  short_description: "Delivery Social: run focused tasks"
+policy:
+  allow_implicit_invocation: false

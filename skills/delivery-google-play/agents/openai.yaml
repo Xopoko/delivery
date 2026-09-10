@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Google Play"
+  short_description: "Delivery Google Play: run focused tasks"
+policy:
+  allow_implicit_invocation: false

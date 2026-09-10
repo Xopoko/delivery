@@ -1,0 +1,5 @@
+interface:
+  display_name: "Delivery Chrome Web Store"
+  short_description: "Delivery Chrome Web Store: run focused tasks"
+policy:
+  allow_implicit_invocation: false
