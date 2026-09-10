@@ -3,7 +3,7 @@ name: delivery-web
 description: >-
   Deliver a website or API on an existing host: bind revision, origin,
   process, data, DNS, TLS and Cloudflare ingress; deploy once, recover safely,
-  and prove the anonymous public path. Excludes implementation and cloud
+  and prove intended consumer access. Excludes implementation and cloud
   architecture redesign.
 ---
 
@@ -22,8 +22,8 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
    deploy production, cut over traffic, recover, or verify. Bind the canonical
    hostname and user path, owner/provider account, origin host, environment,
    process/service, listener, ingress/tunnel/proxy, DNS zone/record, TLS mode,
-   data stores, release mode, and current live revision. Similar hostnames or
-   containers are not identity.
+   data stores, release mode, intended audience and access controls, and current
+   live revision. Similar hostnames or containers are not identity.
 2. Bind one immutable release input: exact source revision or source archive,
    dirty-state decision, artifact/image digest, config schema, runtime and
    dependency lock, migration revision, public asset manifest, and secret
@@ -39,14 +39,17 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
    version alongside old, or start behind a nonpublic/zero-traffic route. Run
    origin-level health and product-critical smoke before traffic cutover. A
    process that merely started is not healthy.
-5. For Cloudflare Tunnel production, use the existing named tunnel, exact
-   hostname route, validated ingress with a final catch-all, protected connector
-   credential, active connector evidence, and a loopback/private origin where
-   intended. A Quick Tunnel is preview evidence only. Do not replace a managed
-   tunnel, expose the origin publicly, or broaden ingress because discovery was
-   incomplete.
+5. For Cloudflare Tunnel production, bind the existing tunnel and its management
+   mode. For a locally managed tunnel, validate its actual ingress configuration,
+   rule matching, and final catch-all. For a remotely managed tunnel, inspect
+   the effective routes and origin parameters through its dashboard or API;
+   a local configuration check does not verify those routes. Preserve the
+   management mode, protected connector credential, active connector evidence,
+   and intended loopback/private origin. A Quick Tunnel is preview evidence
+   only. Do not replace the tunnel, expose the origin publicly, or broaden
+   ingress because discovery was incomplete.
 6. Preview revision/digest, target host and service, file/config/migration diff,
-   backup, expected downtime, origin and public health checks, hostname/DNS/TLS,
+   backup, expected downtime, origin and consumer checks, hostname/DNS/TLS,
    cache behavior, traffic transition, cost impact, and recovery command or
    provider action. Apply the shared authority contract: an exact current
    request can authorize its named DNS/traffic cutover. Request approval when
@@ -57,13 +60,16 @@ AWS owns the compute or managed service, compose `delivery-aws`. Read the
    Acquire the project's existing target-scoped deploy lock when present; do
    not invent a lock service for one host.
    On disconnect or unknown result, inspect host files, service/container state,
-   provider deployment, logs, origin health and public revision marker before
+   provider deployment, logs, origin health and deployed revision evidence before
    any repeat. Do not alternate between SSH, CI and dashboard writers.
 8. Prove both boundaries: origin/service health from its trust boundary, then
-   the anonymous canonical HTTPS path through DNS, TLS, edge/tunnel/proxy and
-   cache. Exercise one real browser/client path plus the API or asset/version
-   discriminator that identifies the exact release. Observe errors and logs
-   after cutover for a bounded period proportional to risk.
+   the intended consumer path through DNS, TLS, edge/tunnel/proxy and cache.
+   For public content, verify anonymous access. For protected content, verify
+   the expected anonymous denial or sign-in challenge where reachable, then
+   use an authorized consumer session or client to identify the exact release
+   and exercise its critical behavior. Preserve access controls; a public
+   hostname does not imply public content. Observe errors and logs after
+   cutover for a bounded period proportional to risk.
 
 ## Recovery And Stop
 
@@ -73,7 +79,8 @@ side effects, or secret rotation. Prefer roll-forward when state compatibility
 makes a binary rollback unsafe. Test or inspect the recovery path before the
 consequential transition; do not invent it after an outage.
 
-Stop as `origin staged`, `deployed`, `traffic cut over`, or `publicly verified`.
+Stop as `origin staged`, `deployed`, `traffic cut over`, or `consumer verified`;
+use `publicly verified` only when the intended content is public.
 If review, DNS propagation, certificate issuance, health, data compatibility,
 or access remains unresolved, preserve exact live state and the next read-only
 discriminator.

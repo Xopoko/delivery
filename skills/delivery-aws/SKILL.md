@@ -9,18 +9,19 @@ description: >-
 # AWS Delivery
 
 Use this adapter when AWS owns the target compute, container, function, static
-site, or deployment state. It composes `delivery-web` when a public website/API
+site, or deployment state. It composes `delivery-web` when a website/API
 and edge route are part of the outcome. Read the
 [shared control contract](../../references/delivery-control-contract.md) and
 [AWS delivery reference](../../references/aws-delivery.md).
 
 ## Deliver Through The Existing AWS Owner
 
-1. Observe the caller identity without exposing credentials, account, region,
+1. Observe the caller identity without exposing credentials. Bind account, region,
    environment, service family, stable resource IDs/tags, current deployment,
-   traffic route, dependencies, data stores, public hostname, alarms and cost
-   posture. Never infer production from a default CLI profile, resource name,
-   old handoff, or region remembered from another app.
+   traffic route, dependencies, data stores, intended endpoint and audience,
+   access controls, alarms and cost posture. Never infer production from a
+   default CLI profile, resource name, old handoff, or region remembered from
+   another app.
 2. Select the project's existing service and deployment owner: Lightsail
    instance/container service, EC2/CodeDeploy, ECS, Lambda alias, S3/CloudFront,
    CloudFormation/CDK, or another already-adopted route. AWS Copilot CLI reached
@@ -59,9 +60,11 @@ and edge route are part of the outcome. Read the
    identities before retrying or switching to the console.
 8. Prove the service and its consumer boundary: exact active revision/digest,
    desired instance/task/function count, healthy provider state, no new critical
-   errors/alarms, and the actual application/API/mobile path through its public
-   hostname or upstream client. A green AWS deployment alone is not product
-   delivery.
+   errors/alarms, and the actual application/API/mobile path through its intended
+   public or private endpoint and authorization boundary. For protected content,
+   verify authorized consumer access and expected denial to unauthorized
+   requests; do not add a public endpoint or weaken access controls to obtain
+   proof. A green AWS deployment alone is not product delivery.
 
 ## Recovery Boundary
 

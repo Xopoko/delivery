@@ -612,6 +612,35 @@ class DeliveryReceiptTest(unittest.TestCase):
         self.assertNotIn("SYNTHETIC_PRIVATE", json.dumps(result))
         self.assertNotIn(str(self.receipt), json.dumps(result))
 
+    def test_ambiguous_or_nonstandard_json_is_rejected_without_echo(self) -> None:
+        self.init_receipt()
+        baseline = self.receipt.read_text(encoding="utf-8")
+        cases = (
+            baseline.replace('"provider": "youtube"', '"provider": "aws", "provider": "youtube"'),
+            baseline.replace('"effect": "stage"', '"effect": "release", "effect": "stage"'),
+            baseline.replace('"provider": "youtube"', '"provider": NaN, "provider": "youtube"'),
+            '{"SYNTHETIC_PRIVATE_KEY":' + '[' * 1500 + '0' + ']' * 1500 + '}',
+        )
+        for index, candidate in enumerate(cases):
+            with self.subTest(case=index):
+                self.receipt.write_text(candidate, encoding="utf-8")
+                result = self.run_cli("show", "--file", str(self.receipt), expected_code=2)
+                self.assertFalse(result["ok"])
+                self.assertNotIn("SYNTHETIC_PRIVATE", json.dumps(result))
+                self.assertNotIn(str(self.receipt), json.dumps(result))
+
+    def test_unrepresentable_utc_observation_is_rejected_before_write(self) -> None:
+        self.init_receipt()
+        for timestamp in ("0001-01-01T00:00:00+01:00", "9999-12-31T23:59:59-01:00"):
+            with self.subTest(timestamp=timestamp):
+                self.run_cli(
+                    "record", "--file", str(self.receipt), "--event-id", "invalid-time",
+                    "--phase", "processing", "--status", "processing",
+                    "--observed-at", timestamp, expected_code=2,
+                )
+        shown = self.run_cli("show", "--file", str(self.receipt))
+        self.assertEqual(shown["receipt"]["events"], [])
+
 
 if __name__ == "__main__":
     unittest.main()

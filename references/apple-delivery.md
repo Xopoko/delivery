@@ -231,7 +231,9 @@ upload, or notarization command recipes.
    TestFlight state, version/submission state, availability, and release mode.
 2. Resolve the live next build number and bind it to the release revision.
 3. Use existing healthy signing first. If signing setup is genuinely missing,
-   route to `appstore-signing-setup` under the credential rules below.
+   use the project's Xcode signing workflow and official Apple developer account
+   UI under the credential rules below. An installed signing specialist is
+   optional; verify it is available before routing to it.
 4. Run the project-owned release tests and user-path smoke needed for this
    product. Delivery does not invent a generic test suite or fix unrelated app
    architecture.
@@ -286,9 +288,12 @@ For a first in-app purchase or subscription, do not stop at the word
 pricing/territories, tax category, availability, review screenshot, version or
 submission relationship and current item states. Prove the purchase graph in
 Sandbox, then TestFlight when appropriate, and preserve production availability
-as a separate result. A first IAP/subscription can need to accompany an app
-version submission. Removal, price/territory changes and subscription-group
-changes can affect existing customers and require an exact preview; never infer
+as a separate result. The first item of each IAP type (consumable,
+non-consumable, auto-renewable subscription, or non-renewing subscription) must
+accompany a new app version. Each new subscription group needs at least one of
+its subscriptions; put the version, group, and items being reviewed together in
+the same draft submission. Removal, price/territory changes and subscription
+group changes can affect existing customers and require an exact preview; never infer
 that deleting a draft cancels an active customer entitlement.
 
 Resolve readiness from the bound artifact, declarations, and current App Store
@@ -577,6 +582,9 @@ These primary sources were checked on 2026-08-24. Apple changes upload,
 submission, screenshot, privacy, review, role, and tool requirements; re-open
 the relevant source before each live release instead of freezing values from
 this runbook.
+
+The first-IAP-type and new-subscription-group submission requirements were
+rechecked against Apple's submission guidance on **2026-09-10**.
 
 - [Distributing your app for beta testing and releases](https://developer.apple.com/documentation/xcode/distributing-your-app-for-beta-testing-and-releases)
 - [Upload builds](https://developer.apple.com/help/app-store-connect/manage-builds/upload-builds/)

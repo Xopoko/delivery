@@ -3,6 +3,7 @@
 Official Cloudflare contracts checked **2026-08-24**. This runbook is
 provider-neutral at the origin and composes the project's existing platform.
 It does not choose a cloud architecture or teach application implementation.
+Tunnel management and consumer access guidance rechecked **2026-09-10**.
 
 ## Evidence boundary
 
@@ -21,7 +22,7 @@ Bind one deployment epoch:
 owner/account + environment + canonical hostname + origin host/service/listener
 + ingress/tunnel/proxy + DNS/TLS route + source revision/artifact/image digest
 + config schema + secret-reference revision + data/migration revision
-+ release effect + traffic mode + known-good recovery target
++ release effect + traffic mode + audience/access policy + known-good recovery target
 ```
 
 Record stable nonsensitive IDs, hashes, ports and public hostnames needed for
@@ -34,7 +35,7 @@ database dumps, customer data or raw config responses.
 Read repository guidance and live topology before choosing commands:
 
 1. source revision and dirty state; build/runtime lock files; current artifact
-   or image digest; current public revision marker;
+   or image digest; current deployed revision evidence;
 2. host identity, OS/runtime, disk/memory, process supervisor, service/container
    ownership, listeners and dependencies;
 3. configuration schema and secret references; mutable data volumes; database
@@ -43,8 +44,9 @@ Read repository guidance and live topology before choosing commands:
    baseline;
 5. reverse proxy or Tunnel ingress, origin binding and trust model, DNS record,
    TLS mode/certificate and cache behavior;
-6. current public route, redirects, critical browser/API path, monitoring,
-   alarms, expected downtime and known-good recovery.
+6. current consumer route, intended audience and access controls, redirects,
+   critical browser/API path, monitoring, alarms, expected downtime and
+   known-good recovery.
 
 The deployed input must be reproducible. Prefer an exact commit archive,
 versioned package or immutable image digest. `git archive` is useful when the
@@ -79,11 +81,18 @@ logs. A restart receipt is not health.
 
 ## Cloudflare Tunnel contract
 
-For production, bind the existing named tunnel ID/name, connector/service,
-published hostname route and origin service. Validate local ingress syntax and
-rule matching and keep a final catch-all. Verify active connector/HA connection
-evidence and the expected DNS route to the tunnel. Quick Tunnels are temporary
-preview paths, not a production identity or release receipt.
+For production, bind the existing tunnel ID/name, connector/service, management
+mode, hostname route and origin service. Preserve the current management mode:
+
+- Locally managed: validate the actual local ingress configuration, rule
+  matching, and its final catch-all rule.
+- Remotely managed: inspect the effective route configuration and origin
+  parameters through the dashboard or API. Cloudflare stores this configuration;
+  validating a local file does not prove the active remote routes.
+
+Verify active connector/HA connection evidence and the expected DNS route to
+the tunnel. Quick Tunnels are temporary preview paths, not a production identity
+or release receipt.
 
 Replicas of one tunnel provide availability, not deterministic blue/green
 traffic: Cloudflare does not guarantee which replica receives a request. Do not
@@ -104,9 +113,17 @@ A connector being connected proves only the transport. Separately prove:
 - the intended ingress rule selects the intended origin;
 - origin health succeeds at its local/private boundary;
 - DNS and TLS resolve for the canonical hostname;
-- the anonymous edge path returns the expected exact revision and behavior;
+- the intended consumer path returns the expected exact revision and behavior;
+- public content is anonymously accessible; protected content requires the
+  intended authorization, and unauthenticated requests receive the expected
+  denial or sign-in challenge where the endpoint is reachable;
 - cache does not hide the old release. Prefer versioned assets or the narrowest
   cache purge; do not purge everything by reflex.
+
+Cloudflare Access can protect an application behind a public hostname. Preserve
+its policies and token validation, then verify the product through an authorized
+consumer session or client. A public hostname or healthy tunnel does not require
+making the application anonymously readable.
 
 DNS proxied records commonly use automatic TTL, but local caches and certificate
 issuance can outlast a dashboard change. Preserve observed state instead of
@@ -116,7 +133,7 @@ declaring propagation complete by elapsed time.
 
 After a connection loss, inspect exact file/image revision, service/container
 identity, deployment record, logs, origin health, connector state, DNS/TLS and
-public revision marker. Do not rerun a deploy until the first effect is known.
+deployed revision evidence. Do not rerun a deploy until the first effect is known.
 
 Rollback is not one universal command. It can be a traffic switch to a healthy
 old version, redeployment of a known-good artifact, provider rollback, or a
@@ -130,9 +147,11 @@ Completion evidence:
 - `origin_staged`: exact revision runs privately and passes origin health/smoke;
 - `deployed`: supervisor/provider reports exact revision healthy on target;
 - `traffic_cut_over`: canonical route targets that revision;
-- `publicly_verified`: anonymous HTTPS DNS/TLS/edge path and product-critical
-  browser/API flow identify the exact revision, with bounded post-cutover logs
-  and error signals observed.
+- `consumer_verified`: the intended HTTPS DNS/TLS/edge path and product-critical
+  browser/API flow identify the exact revision under the required access policy,
+  with bounded post-cutover logs and error signals observed;
+- `publicly_verified`: additionally, the intended public content and behavior
+  are anonymously accessible. Use this state only for a public audience.
 
 ## Official Cloudflare sources
 
@@ -143,6 +162,8 @@ Completion evidence:
 - [Tunnel and replica terminology](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/get-started/tunnel-useful-terms/)
 - [Route DNS or an application to a Tunnel](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/)
 - [Locally managed ingress configuration](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/local-management/configuration-file/)
+- [Local and remote tunnel management](https://developers.cloudflare.com/tunnel/advanced/local-management/)
+- [Protect a published application with Access](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/)
 - [Tunnel credential scopes](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/do-more-with-tunnels/local-management/tunnel-permissions/)
 - [Run parameters and connector tokens](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/configure-tunnels/run-parameters/)
 - [Tunnel metrics](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/monitor-tunnels/metrics/)

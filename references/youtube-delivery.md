@@ -14,12 +14,23 @@ Bind before mutation:
 - channel feature eligibility, strikes, upload limits, and existing matching
   video IDs;
 - media SHA-256/size and probed streams, duration, dimensions, aspect, frame
-  rate, codecs, audio, caption and thumbnail hashes;
+  rate, codecs, audio, and hashes for supplied caption and thumbnail files;
 - title, description, category, language, audience, age restriction, rights,
   paid promotion, altered/synthetic disclosure, license/embedding/remixing,
   comments, subscriber notification, visibility, schedule/timezone, and Shorts
   intent;
 - desired effect: `private-ready`, `unlisted`, `scheduled`, or `public`.
+
+Bind caption and thumbnail choices explicitly. Captions may be supplied,
+existing, automatic, or absent where neither the requested outcome nor an
+applicable requirement calls for them. Preserve accessibility goals and check
+caption-certification obligations; do not create an unconditional caption-upload
+gate. A thumbnail may use the provider's generated choice or a custom image.
+Custom-thumbnail eligibility is a blocker only when that custom image is part
+of the requested outcome. These choices and the current Shorts thumbnail route
+were rechecked on **2026-09-10** against the official sources below; custom
+Shorts thumbnails currently use YouTube Studio on a computer with a verified
+account, so do not assume the general thumbnail API supports that operation.
 
 For the shared receipt, map `private-ready` to normalized `stage`; map
 `unlisted`, `scheduled`, and `public` to `release`, with exact visibility in
@@ -39,16 +50,20 @@ and use official Studio when appropriate—never try to evade the restriction.
 ## Artifact readiness
 
 Use a real media probe. Prefer the current YouTube encoding guidance and retain
-the native frame rate and aspect ratio rather than adding black bars. Verify at
-least one video and audio stream, sane duration, progressive playback readiness,
-and selected caption format. A codec/container recommendation is not a policy
-guarantee.
+the native frame rate and aspect ratio rather than adding black bars. Verify a
+video stream, sane duration, progressive playback readiness, and the format of
+any supplied captions. Check audio presence and quality against the intended
+artifact: missing expected narration or music is a defect; intentional silence
+must remain explicit. Let provider validation establish format acceptance. A
+codec/container recommendation is not a policy guarantee.
 
 For Shorts intent, verify the current official aspect/duration rule and rights
-behavior. As of the observation date, standard-channel square or vertical
-uploads up to three minutes are categorized as Shorts, while longer-than-one-
-minute Shorts with an active Content ID claim can be blocked. Do not freeze
-these thresholds; re-check them. The Data API exposes no documented writable
+behavior. Standard-channel square or vertical uploads up to three minutes are
+categorized as Shorts under the current upload-date rules. As rechecked on
+**2026-09-10**, a Short longer than one minute with any active copyright claim,
+including a manual claim, is blocked globally until the claim is resolved.
+Read the exact claim state before promising playback. Do not freeze these
+thresholds; re-check them. The Data API exposes no documented writable
 or authoritative `isShort` field, so classification is an external-surface
 proof after publication.
 
@@ -79,15 +94,18 @@ proof after publication.
    an explicit new human decision that acknowledges duplicate risk.
 5. Poll `videos.list` for upload and processing status. `uploaded`, `processed`,
    `failed`, and `rejected` are different states with explicit reasons.
-6. Insert timed captions and persist the returned caption-track ID immediately
-   as its own typed provider object. Reconcile a lost response by that ID and a
-   deterministic identity such as video, language, and track name. Require one
-   exact match: zero, multiple, or conflicting matches go to human review and
-   never authorize a second insert. Read caption state with
-   `captions.list(part=snippet, videoId=..., id=...)`; the processing state is
-   `snippet.status`, not a `status` part. Wait for `serving` and retain
-   `failureReason` when failed. Upload a thumbnail only after channel
-   eligibility is confirmed.
+6. For supplied captions, insert the timed track and persist the returned
+   caption-track ID immediately as its own typed provider object. Reconcile a
+   lost response by that ID and a deterministic identity such as video,
+   language, and track name. Require one exact match: zero, multiple, or
+   conflicting matches go to human review and never authorize a second insert.
+   Read caption state with `captions.list(part=snippet, videoId=..., id=...)`;
+   the processing state is `snippet.status`, not a `status` part. Wait for
+   `serving` and retain `failureReason` when failed. For existing or automatic
+   captions, inspect the intended track instead of inserting a duplicate. If
+   captions are legitimately absent, record that choice without inventing a
+   track. Apply the chosen thumbnail using its supported route and verify the
+   rendered result; upload a custom image only when requested and eligible.
 7. Review private playback as the intended viewer plus Studio Checks and
    Notices. Confirm age restriction, paid promotion, license/embedding,
    remixing, comments and notification intent in the official surface when the
@@ -121,15 +139,17 @@ permanent and always needs a separate exact checkpoint.
 
 - `private-ready`: exact video ID, processed at the chosen threshold, private
   playback checked as an intended viewer, full metadata/declaration intent plus
-  thumbnail/captions bound, Checks/Notices observed.
+  caption/thumbnail choices recorded, any requested or required tracks/assets
+  verified, and Checks/Notices observed. A valid absent-caption or generated-
+  thumbnail choice does not fail readiness.
 - `scheduled`: provider reports private plus the exact future `publishAt`.
 - `public`: provider reports public and anonymous playback works where region,
   age and audience permit; otherwise the intended-viewer limitation is explicit.
 - `verified Short`: public playback plus observed Shorts classification/surface.
 
 Retain limitations such as processing resolution still pending, a notice still
-running, API audit restriction, missing thumbnail capability, or unproved
-Shorts classification.
+running, API audit restriction, unavailable requested custom-thumbnail
+capability, or unproved Shorts classification.
 
 ## Official sources
 
@@ -148,6 +168,9 @@ Shorts classification.
 - [List caption tracks and snippet state](https://developers.google.com/youtube/v3/docs/captions/list)
 - [Insert captions](https://developers.google.com/youtube/v3/docs/captions/insert)
 - [Set a thumbnail](https://developers.google.com/youtube/v3/docs/thumbnails/set)
+- [Custom video and Shorts thumbnails](https://support.google.com/youtube/answer/72431)
+- [Add subtitles and captions](https://support.google.com/youtube/answer/2734796)
+- [Caption certification](https://support.google.com/youtube/answer/2789511)
 - [Upload videos in YouTube Studio](https://support.google.com/youtube/answer/57407)
 - [Content notices](https://support.google.com/youtube/answer/17011221)
 - [Three-minute Shorts](https://support.google.com/youtube/answer/15424877)

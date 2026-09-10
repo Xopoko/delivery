@@ -25,14 +25,16 @@ the host does not supply it.
    videos, and installed project-native workflow. A Google account alone is not
    channel identity. Use the official UI for channel or OAuth bootstrap.
 2. Bind the video byte size and SHA-256 plus duration, width/height, aspect
-   ratio, frame rate, video/audio codecs, audio sample rate, and caption and
-   thumbnail hashes. Use `ffprobe`/`ffmpeg` when available; missing media proof
-   is a blocker, not permission to guess from a filename.
-3. Bind title, description, category, language, thumbnail, captions, audience,
-   age restriction, altered/synthetic-media disclosure, rights, paid promotion,
+   ratio, frame rate, video/audio codecs, audio sample rate, and hashes for any
+   supplied caption or thumbnail files. Use `ffprobe`/`ffmpeg` when available;
+   missing media proof is a blocker, not permission to guess from a filename.
+3. Bind title, description, category, language, thumbnail and caption choices,
+   audience, age restriction, altered/synthetic-media disclosure, rights, paid promotion,
    license/embedding/remixing, comments, subscriber notification, visibility,
    and schedule with timezone. Do not infer made-for-kids, rights, claims,
    promotion, or synthetic-content answers from genre or prompt text.
+   Preserve requested accessibility and applicable caption requirements, while
+   allowing legitimate absent-caption and provider-generated-thumbnail choices.
 4. Prefer an existing reviewed project workflow. Otherwise use the official
    YouTube Data API for repeatable uploads or YouTube Studio/Computer Use for
    first-time setup, checks, notices, and fields the API cannot prove. Preflight
@@ -48,10 +50,15 @@ the host does not supply it.
    provider object. If both identities are missing after an ambiguous insert,
    keep `effect_unknown`; title/channel/time heuristics do not authorize a
    second upload.
-6. Wait for the chosen processing threshold, attach or reconcile captions,
-   persist the caption ID as a separate provider object, require one exact
-   deterministic match, and read processing from `snippet.status`. Missing or
-   conflicting caption identity requires human review rather than another insert.
+6. Wait for the chosen processing threshold. Attach supplied captions or
+   inspect the intended existing/automatic track; require tracks only when the
+   requested outcome or applicable requirements call for them. For an inserted
+   track, persist the caption ID as a separate provider object, require one
+   exact deterministic match, and read processing from `snippet.status`.
+   Missing or conflicting identity after insertion requires human review
+   rather than another insert. Apply and verify the chosen thumbnail through
+   its supported route; custom-thumbnail eligibility is not a universal
+   publication prerequisite.
    Verify the private watch page as an intended viewer, and inspect Studio
    Checks/Notices plus bound declarations. Technical processing is not copyright
    clearance or publication approval.

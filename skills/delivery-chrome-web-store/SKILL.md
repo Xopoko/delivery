@@ -75,6 +75,9 @@ before a provider write.
   published.
 - Rollback is a new provider transition with its own version and evidence; do
   not overwrite a current ZIP or promise instantaneous downgrade semantics.
+  Test the restored package against current stored data before the action.
+  Preview discarded pending/staged submissions and, during partial rollout,
+  the actual prior 100%-deployed version that will be restored.
 - A `.pem`, OAuth secret, service-account key, token, cookie, or developer
   session is protected material. Legacy local packaging keys are neither Store
   authorization nor permission to expose or reuse them. Use the shared secure

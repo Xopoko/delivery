@@ -39,9 +39,11 @@ observed -> prepared -> uploaded -> processing -> staged -> submitted
 ```
 
 `rejected`, `failed`, `blocked`, and `effect_unknown` are explicit side states.
-They do not imply permission to delete, replace, resubmit, or retry. Recovery
-may return to an earlier phase only after live state and a new artifact or
-provider revision are bound.
+They do not imply permission to delete, replace, resubmit, or retry. Reconcile
+the same object after uncertainty and record the phase the provider actually
+reports, even if it precedes the last observation. If recovery changes a bound
+artifact, provider object, or material intent, bind a new delivery epoch before
+the next write.
 
 Provider-native names remain in `status`; the phase is a portable summary.
 Never derive a later phase only from an earlier phase, elapsed time, an email,
@@ -51,6 +53,7 @@ or a local success. In particular:
 - uploaded is not processed;
 - processed or valid is not assigned to testers or submitted;
 - approved or certified is not released;
+- scheduled is not yet released or available to the intended audience;
 - released is not necessarily searchable, watchable, or installable;
 - public listing/post/hostname is not proof of the intended artifact or service
   behavior.
@@ -189,18 +192,22 @@ Choose proof proportional to the requested effect:
 
 - staging: exact provider object exists with the bound artifact and intended
   private/internal audience;
-- submission: provider reports the exact object in review/certification;
+- submission: provider acknowledges submission of the exact object, including
+  a pending-review queue; report whether review/certification has actually begun;
 - approval: provider reports approval/certification for the exact version;
-- release: provider reports released/public/scheduled state;
-- delivery: anonymous storefront/watch/post/hostname lookup and the real
-  consumer path work.
+- release: provider reports the authorized distribution effect; scheduling
+  proves only the schedule until release and availability are observed;
+- delivery: the intended audience can use the exact artifact or service through
+  its real consumer path. Check anonymous access when public access is intended;
+  for protected delivery, verify expected anonymous denial or challenge and the
+  authorized consumer path without exposing credentials.
 
 For applications/extensions, prefer a clean provider-origin install plus launch
 or core behavior and the relevant update, uninstall, alias, entitlement,
 purchase, or backend smoke. For social/video, verify canonical author/channel,
 payload/playback, media, metadata, captions, visibility/schedule, and Shorts
 surface when requested. For web/cloud, prove exact active revision, origin
-health, DNS/TLS/edge/traffic and the public product or client path. Preserve
+health, DNS/TLS/edge/traffic and the intended product or client path. Preserve
 failures and limitations; do not weaken “delivered” to whatever the last tool
 exposed.
 

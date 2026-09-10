@@ -2,10 +2,10 @@
 
 Observation date: 2026-08-24.
 
-Delivery is a reference-only synthesis. Candidate repositories were inspected
-for mechanisms and failure boundaries at immutable commits; their code,
-instructions, installers, credential examples, and MCP servers were not copied,
-installed, or executed. Platform behavior remains governed by current official
+Delivery's provider guidance synthesizes mechanisms and failure boundaries
+from the candidates below. The retained synthesis records report static
+inspection at immutable commits, with no candidate executable code run or MCP
+server installed. Platform behavior remains governed by current official
 documentation and live provider state.
 
 ## Public candidates inspected

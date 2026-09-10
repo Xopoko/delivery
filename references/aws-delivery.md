@@ -3,6 +3,7 @@
 Official AWS contracts checked **2026-08-24**. AWS service features, quotas,
 runtime versions, deployment options and prices change. Observe the current
 account/region/resource and official service contract during every release.
+Consumer access guidance rechecked **2026-09-10**.
 
 ## Evidence boundary
 
@@ -21,7 +22,7 @@ Bind:
 - service family and stable resource identifiers/tags: instance, container
   service/deployment, CodeDeploy app/group/deployment, ECS cluster/service/task
   definition, Lambda function/version/alias, bucket/distribution, or stack;
-- current active deployment and traffic route;
+- current active deployment, traffic route, intended audience and access policy;
 - exact source archive hash, image digest, versioned object, function version,
   task definition, stack template/change set or deployment revision;
 - runtime/architecture, config schema, secret references, data/migration
@@ -41,11 +42,11 @@ the project:
 | Existing target | Provider state to bind | Minimum proof | Recovery semantics |
 |---|---|---|---|
 | Lightsail instance | instance/region, snapshot/backup, deployed revision, service/container | host process, origin health, logs, firewall and consumer path | redeploy known-good revision or create/restore replacement resource; IP/DNS may change |
-| Lightsail container service | service, image digest, deployment version, public endpoint/health | deployment `Active`, endpoint health, logs and consumer path | create a new deployment from a saved version; one running deployment at a time |
+| Lightsail container service | service, image digest, deployment version, intended public/private endpoint and health | deployment `Active`, intended endpoint health, logs and authorized consumer path | create a new deployment from a saved version; one running deployment at a time |
 | EC2 with CodeDeploy | app, group, deployment configuration/revision | deployment/instance lifecycle, target health, logs and consumer path | rollback is a new deployment of the old revision; scripts/data are not undone |
 | ECS | cluster, service, task definition/image digest, desired count, deployment/traffic | service stable, healthy tasks/targets, logs/alarms and consumer path | circuit breaker or a new service deployment; inspect traffic/task-set state |
 | Lambda | function, immutable version, alias weights, event source | version/config, alias traffic, errors/latency and real invocation | shift alias to known-good version; external writes remain |
-| S3/CloudFront | bucket/key versions or hashed assets, distribution/config | exact object hashes, TLS/cache and anonymous page/assets | point to versioned files or invalidate narrowly; deleted/unversioned data may not return |
+| S3/CloudFront | bucket/key versions or hashed assets, distribution/config, audience/access policy | exact object hashes, TLS/cache and page/assets through the intended authorization boundary | point to versioned files or invalidate narrowly; deleted/unversioned data may not return |
 | CloudFormation/CDK | stack, template hash, change set and rendered resource diff | stack events/status plus service and consumer proof | stack rollback has resource-specific limits; continue/repair explicitly |
 
 For Lightsail, inspect IPv4 and IPv6 firewalls independently; they govern
@@ -115,7 +116,12 @@ new state.
 Provider `Active`, `CREATE_COMPLETE`, stable tasks or a healthy target is not
 the terminal product proof. Verify the real application/API/mobile-client path
 through its intended DNS, TLS, edge/tunnel/load balancer and authorization
-boundary, and observe bounded post-cutover errors.
+boundary, and observe bounded post-cutover errors. Lightsail container services
+can use only their private endpoint, and CloudFront can require signed URLs or
+cookies. Preserve the intended access model: prove anonymous access for public
+content, or authorized access and expected unauthorized denial for protected
+content. Keep authentication material within the protected consumer session;
+do not create public exposure to make a delivery check pass.
 
 ## Official sources
 
@@ -129,5 +135,6 @@ boundary, and observe bounded post-cutover errors.
 - [ECS deployment failure detection](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/deployment-failure-detection.html)
 - [Lambda weighted alias routing](https://docs.aws.amazon.com/lambda/latest/dg/configuring-alias-routing.html)
 - [CloudFront invalidation and versioned files](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html)
+- [CloudFront private content](https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html)
 - [CloudFormation change sets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html)
 - [AWS Budgets best practices](https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-best-practices.html)

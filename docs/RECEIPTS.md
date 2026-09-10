@@ -27,6 +27,11 @@ Successful operations emit JSON and exit with status `0`. Validation failures
 emit a JSON error and exit with status `2`. Treat stdout as potentially private:
 `init` and `show` include the receipt, and `record` includes the event.
 
+Receipt JSON must be unambiguous: duplicate object keys, non-finite numbers,
+and excessively nested input are rejected without echoing its contents.
+Observation timestamps must be representable in UTC so that resuming can
+determine the latest observation reliably.
+
 ## Bind the release inputs
 
 This example uses fictional values and relative example paths. Replace them

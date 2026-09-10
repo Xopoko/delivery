@@ -80,10 +80,12 @@ version, signing identity, review state, or authorization by inference.
    disconnect, or missing response, record `effect_unknown` and read provider
    state before any retry or alternate writer.
 8. Prove the strongest achieved state independently: provider/API state, then
-   the anonymous public surface, and finally install, launch, update, uninstall,
-   alias, browser-extension behavior, canonical post, playback/captions/Shorts
-   classification, or the public DNS/TLS/origin/application path where that
-   behavior defines delivery.
+   the surface available to the intended audience, and finally install, launch,
+   update, uninstall, alias, browser-extension behavior, canonical post, playback/captions/Shorts
+   classification, or the DNS/TLS/origin/application path where that
+   behavior defines delivery. For protected products, check expected anonymous
+   denial or challenge and the authorized consumer path; a successful deployment
+   must preserve the requested access restrictions.
 9. Stop at the requested outcome. If review or processing remains external,
    preserve the exact observed state and next discriminator. Create monitoring
    only when the user explicitly asks to wait, finish, or babysit it.

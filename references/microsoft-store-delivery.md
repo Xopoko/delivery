@@ -7,6 +7,8 @@ before a consequential action because Partner Center fields, policies, CLI
 coverage, and review behavior can change.
 The MSI/EXE silent-install and standalone/offline-installer requirements were
 rechecked against Microsoft's package and certification pages on **2026-09-07**.
+The CLI's pending-draft replacement and `--noCommit` semantics were rechecked
+against Microsoft's command documentation on **2026-09-10**.
 
 ## Completion Contract
 
@@ -241,19 +243,30 @@ When `msstore` is already available:
    help. The Developer CLI is a changing surface and MSIX versus MSI/EXE command
    coverage differs.
 2. Use read-only commands such as submission status/get before mutations.
-3. For the MSIX `publish` path, use the exact `--inputFile`, `--appId`, and
-   draft-preserving `--noCommit` options only when current help confirms them.
-   Never allow the CLI to auto-select an ambiguous "best" artifact.
-4. Read the draft back from Partner Center. CLI exit zero proves only command
-   completion, not that the intended hash, listing, or release options are
-   staged.
+3. For the MSIX `publish` path, use the exact `--inputFile` and `--appId`, plus
+   `--noCommit` to skip committing, only when current help confirms them. Never
+   allow the CLI to auto-select an ambiguous "best" artifact. `--noCommit` does
+   not preserve a pending draft: for an already-published app, `msstore publish`
+   deletes it and creates a replacement from the last published submission,
+   discarding staged metadata. Before that replacement, read the existing draft,
+   preserve the needed nonsensitive metadata and asset references privately,
+   and require authority explicitly covering replacement. If the draft must
+   remain, use Partner Center or a supported existing-submission update against
+   fresh current state. For an authorized replacement, upload before editing
+   metadata, then restore the intended changes to the new draft.
+4. Read the complete draft back from Partner Center. CLI exit zero proves only
+   command completion, not that the intended hash, listing, or release options
+   are staged.
 5. Invoke a commit/publish command only after the exact final preview and
    authority checkpoint. Read status again immediately afterward.
 
-Do not place tenant IDs, client IDs, seller IDs, client secrets, certificate
-passwords, access tokens, or test-account credentials in committed config,
-shell history, literal command arguments, screenshots, or receipts. Do not
-silently change the CLI's global telemetry setting; expose that separate
+Tenant, client, and seller IDs are account identifiers; keep any required
+private identifiers in approved task-local config or receipts outside Git.
+Retain only the minimum needed to bind the provider account and recover the
+operation. Do not place client secrets, certificate private material/passwords,
+access tokens, or test-account credentials in committed config, shell history,
+literal command arguments, screenshots, or receipts. Do not silently change
+the CLI's global telemetry setting; expose that separate
 preference only if it materially blocks the authorized task.
 
 ### Exact final preview

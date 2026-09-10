@@ -111,6 +111,10 @@ def _parse_time(value: str, field: str) -> str:
         raise ReceiptError(f"{field} must be an ISO-8601 timestamp") from exc
     if parsed.tzinfo is None:
         raise ReceiptError(f"{field} must include a timezone")
+    try:
+        parsed.astimezone(timezone.utc)
+    except (ValueError, OverflowError) as exc:
+        raise ReceiptError(f"{field} is outside the supported UTC range") from exc
     return value
 
 
@@ -226,12 +230,29 @@ def _digest(path: Path) -> dict[str, Any]:
     return {"name": path.name, "sha256": digest.hexdigest(), "size": size}
 
 
+def _json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("duplicate JSON key")
+        result[key] = value
+    return result
+
+
+def _invalid_constant(_value: str) -> None:
+    raise ValueError("non-finite JSON number")
+
+
 def _load(path: Path) -> dict[str, Any]:
     try:
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_json_object,
+            parse_constant=_invalid_constant,
+        )
     except FileNotFoundError as exc:
         raise ReceiptError("receipt file does not exist") from exc
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except (OSError, ValueError, RecursionError) as exc:
         raise ReceiptError("receipt file is unreadable or invalid JSON") from exc
     if not isinstance(data, dict):
         raise ReceiptError("receipt root must be an object")

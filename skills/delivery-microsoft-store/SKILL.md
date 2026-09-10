@@ -58,9 +58,14 @@ release.
    default silent behavior, or MSI `/qn`, on an authorized test surface.
 6. **Stage a draft.** Prefer the project's already-working official tooling.
    When the Microsoft Store Developer CLI is present and supports this exact
-   product/lane, feature-probe its current help and use draft-preserving
-   behavior such as `--noCommit`; otherwise use Partner Center. Use the UI for
-   account/bootstrap, identity reservation, legal declarations, and any field
+   product/lane, feature-probe its current help. `--noCommit` skips commit; it
+   does not preserve an existing draft. For an already-published product,
+   `msstore publish` recreates the pending draft and discards staged metadata.
+   Read and preserve required draft changes first, require authority covering
+   replacement, and run an authorized upload before metadata edits. Use Partner
+   Center or a supported existing-submission update when preserving the draft
+   is required. Use the UI for account/bootstrap, identity reservation, legal
+   declarations, and any field
    the CLI/API cannot faithfully represent. Never install tooling or change its
    global telemetry/auth configuration silently.
 7. **Read back and preview.** Re-read the draft from Partner Center or the

@@ -149,6 +149,16 @@ a consequential Store transition. Read current eligibility and outcome, bind
 the restored package/version, and verify which version new and existing users
 actually receive. Cancellation, rollback and unpublish are not interchangeable.
 
+Before rollback, test the exact target package against data written by the current
+version; incompatible stored-data changes can break the extension or lose user
+data. Preview the exact replacement version and all pending review or staged
+submissions that the rollback will discard. During a percentage rollout, the
+provider restores the previous version that reached 100%, which may be older
+than the immediately preceding partial version, and aborts the partial rollout.
+Do not infer these consequences from the generic word "rollback". These
+provider behaviors were rechecked on **2026-09-10** against the official
+[rollback guidance](https://developer.chrome.com/docs/webstore/rollback).
+
 ## Recovery and proof
 
 After a lost upload/submit/publish response, fetch the existing item/status and
