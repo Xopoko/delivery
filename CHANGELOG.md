@@ -3,6 +3,12 @@
 Notable changes are recorded here. A version entry describes the source;
 available release tags and assets are listed on GitHub separately.
 
+## 0.3.1
+
+- Align destination artwork with platform colors: YouTube on red, AWS on
+  yellow, black Apple on ivory, Google Play on periwinkle, and Windows on blue.
+- Keep the compact plugin icon free of platform emblems.
+
 ## 0.3.0
 
 - Prepare Delivery as a standalone package for Codex and Claude Code, with
