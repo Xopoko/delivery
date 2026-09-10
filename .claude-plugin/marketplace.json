@@ -11,7 +11,7 @@
       "name": "delivery",
       "source": "./",
       "description": "Release workflows for apps, content, web, and cloud.",
-      "version": "0.3.1",
+      "version": "0.3.2",
       "repository": "https://github.com/Xopoko/delivery",
       "license": "MIT"
     }

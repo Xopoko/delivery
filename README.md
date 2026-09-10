@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/platforms.png" width="400" alt="Delivery destinations: Apple, Microsoft, Google Play, YouTube, and AWS">
+  <img src="assets/platforms-transparent.png" width="400" alt="Delivery destinations: YouTube, AWS, Apple, Google Play, and Windows">
 </p>
 
 <h1 align="center">Delivery</h1>
