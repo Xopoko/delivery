@@ -4,14 +4,14 @@
     "name": "Xopoko"
   },
   "metadata": {
-    "description": "Delivery Skills for app releases, publishing, and deployment. Developed and tested with Codex."
+    "description": "Agent skills for app releases, publishing, and deployment."
   },
   "plugins": [
     {
       "name": "delivery",
       "source": "./",
-      "description": "Skills for app releases, social posts, YouTube uploads, and web and AWS deployments. Developed and tested with Codex.",
-      "version": "0.4.1",
+      "description": "Agent skills for app releases, social posts, YouTube uploads, and web and AWS deployments.",
+      "version": "0.4.2",
       "repository": "https://github.com/Xopoko/delivery",
       "license": "MIT"
     }

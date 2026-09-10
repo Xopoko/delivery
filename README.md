@@ -5,7 +5,12 @@
 <h1 align="center">Delivery Skills</h1>
 
 <p align="center">
-  Skills for app releases, publishing, and deployment with <strong>Codex</strong>.
+  Agent skills for app releases, publishing, and deployment.
+</p>
+
+<p align="center">
+  For <strong>Codex</strong>, <strong>Claude Code</strong>, <strong>Cursor</strong>,
+  and other coding agents.
 </p>
 
 <p align="center">
@@ -15,13 +20,14 @@
   &middot; <a href="LICENSE">MIT</a>
 </p>
 
-Delivery Skills helps Codex release apps to stores, publish videos and social
+Delivery Skills helps coding agents release apps to stores, publish videos and social
 posts, and deploy websites and AWS services. The skills cover preparation,
 submission, release checks, and recovery when an upload or deployment goes wrong.
 
-Developed and tested with Codex, and installed as a plugin. A Claude Code
-package is also included; see [host compatibility](docs/INSTALL.md#host-compatibility)
-for what has been checked.
+Install the bundled plugins in Codex or Claude Code, or use the skills from a
+full checkout in Cursor and other compatible agents. Development and testing
+are primarily done with Codex; see [host compatibility](docs/INSTALL.md#host-compatibility)
+for installation options and what has been checked.
 
 The package contains skills, provider guides, and an optional Python helper
 for recording delivery progress. Your agent uses your existing project tools
@@ -37,7 +43,9 @@ and provider accounts.
 | Work resumes in a new session | What the provider has already completed and what remains. |
 | A draft is ready | The content and destination match what the user authorized. |
 
-## Install in Codex
+## Installation
+
+### Codex
 
 ```bash
 codex plugin marketplace add Xopoko/delivery
@@ -45,8 +53,34 @@ codex plugin add delivery@delivery
 codex plugin list --marketplace delivery
 ```
 
+### Claude Code
+
+```bash
+claude plugin marketplace add Xopoko/delivery
+claude plugin install delivery@delivery
+claude plugin list
+```
+
+### Cursor
+
+From your project root, keep the complete package under Cursor's skills directory:
+
+```bash
+git clone https://github.com/Xopoko/delivery.git .cursor/skills/delivery
+```
+
+Restart Cursor and look for `/delivery`. See the [Cursor setup guide](docs/INSTALL.md#cursor)
+for the documented discovery behavior and resource checks.
+
+### Other agents
+
+Keep a full checkout accessible to the agent and point it to
+[`skills/delivery/SKILL.md`](skills/delivery/SKILL.md). Preserve the bundled
+`references/` and `scripts/` directories. See the
+[other agents guide](docs/INSTALL.md#other-agents).
+
 Start a fresh session after installation. See [installation and updates](docs/INSTALL.md)
-for requirements, local checkouts, and [Claude Code](docs/INSTALL.md#claude-code).
+for requirements, local checkouts, and discovery checks.
 
 ## Usage
 

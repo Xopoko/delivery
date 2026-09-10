@@ -1,22 +1,26 @@
 # Install Delivery Skills
 
-Delivery Skills is developed and tested with Codex and installed as a plugin.
-Installing it adds instructions and provider guides to your agent. Provider
-tools and account access are supplied separately by your environment.
+Delivery Skills provides instructions and provider guides for coding agents,
+including Codex, Claude Code, Cursor, and other compatible hosts. Codex and
+Claude Code have bundled plugin packages; other agents can read the skills
+from a full checkout. Your environment supplies provider tools and account access.
 
 ## Host compatibility
 
-Codex is the primary development and testing host. Installation and skill
-discovery have been checked in a fresh Codex runtime.
+The skills use Markdown instructions and relative resource paths. Codex is the
+primary development and testing host; the intended audience includes other agents.
 
-A Claude Code package is included. Its manifest and installation command syntax
-have been validated; runtime loading and delivery workflows have not been tested
-in Claude Code. Other agents may use the skills if they support the format and
-can resolve the bundled resources.
+| Agent | How to use Delivery Skills | Verification so far |
+| --- | --- | --- |
+| Codex | Bundled plugin | Installation and skill discovery checked in a fresh runtime. |
+| Claude Code | Bundled plugin | Manifest and installation command syntax validated; runtime and provider workflows not tested here. |
+| Cursor | Full checkout under `.cursor/skills/delivery/` | Layout follows documented nested skill discovery; runtime not tested here. |
+| Other compatible agents | Read the skills and bundled resources from a full checkout | Check discovery and resource access in the chosen host. |
 
 ## Requirements
 
-- An agent host with plugin support: Codex or Claude Code.
+- An agent that can read skill instructions and bundled files. The Codex and
+  Claude Code installation routes use plugin support.
 - Git access to this repository for marketplace installation.
 - Python 3.11+ only for the optional receipt helper, demo, and package checks.
 
@@ -78,15 +82,54 @@ claude plugin marketplace add .
 claude plugin install delivery@delivery
 ```
 
-Keep the entire repository intact. Copying only `skills/` omits the shared
-references and optional helper. For another agent host, consult its current
-Agent Skills support and verify relative resource resolution before use; this
-repository does not claim a native installer for other hosts.
+## Cursor
+
+From the target project's root:
+
+```bash
+git clone https://github.com/Xopoko/delivery.git .cursor/skills/delivery
+```
+
+[Cursor documents recursive discovery of nested skills](https://cursor.com/docs/skills#nested-skill-directories).
+The layout above applies that behavior to this package while keeping shared
+resources in place. Restart Cursor, look for `/delivery`, and ask it to read
+the bundled control contract before contacting a provider. This layout has not
+been tested in a Cursor runtime here.
+
+Keep the complete checkout intact. Importing only individual skill folders may
+omit the shared `references/` and `scripts/` directories; check those resources
+if you use a different import route.
+
+## Other agents
+
+Keep a full checkout in a location the agent can read, for example within its
+workspace:
+
+```bash
+git clone https://github.com/Xopoko/delivery.git delivery-skills
+```
+
+Point the agent to `delivery-skills/skills/delivery/SKILL.md` and let it read the
+linked channel skills and provider guides. Keep `skills/`, `references/`, and
+`scripts/` together: the skill root's `../..` must still resolve to this package.
+Copying or importing individual skill folders can break these shared links.
+
+For an initial check, ask:
+
+> Read delivery-skills/skills/delivery/SKILL.md and its bundled delivery control
+> contract. Resolve package resources from the delivery-skills checkout. Explain
+> how you would resume a timed-out upload. Do not contact or change a provider.
+
+This uses explicit file context; automatic skill discovery depends on the host.
+After the agent can read the resources, use the same task examples as in the
+[README](../README.md#usage). For other hosts, check their current Agent Skills
+support and resource-loading behavior before relying on automatic discovery.
 
 ## Verify discovery
 
-Start a fresh agent session after installing or updating. Check the host's
-plugin inventory for Delivery Skills and ask:
+Start a fresh agent session after installing or updating. For plugin installs,
+check the host's plugin inventory for Delivery Skills. For a full checkout,
+give the agent its skill path. Then ask:
 
 > Confirm that Delivery Skills is available. List its skills, open its bundled
 > delivery control contract, and explain how it handles a timed-out upload.

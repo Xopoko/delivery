@@ -1,7 +1,7 @@
 {
   "name": "delivery",
-  "version": "0.4.1",
-  "description": "Skills for app releases, social posts, YouTube uploads, and web and AWS deployments. Developed and tested with Codex.",
+  "version": "0.4.2",
+  "description": "Agent skills for app releases, social posts, YouTube uploads, and web and AWS deployments.",
   "author": {
     "name": "Xopoko"
   },

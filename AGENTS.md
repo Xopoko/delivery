@@ -1,8 +1,9 @@
 # Contributing with an agent
 
-Delivery Skills is developed and tested as a Codex plugin, with a Claude Code
-package included. Keep workflows in `skills/`, shared provider guidance in
-`references/`, and deterministic local tools in `scripts/`.
+Delivery Skills is for coding agents, including Codex, Claude Code, Cursor, and
+other compatible hosts. Codex is the primary development and testing host.
+Keep workflows in `skills/`, shared provider guidance in `references/`, and
+deterministic local tools in `scripts/`.
 
 - Preserve exact target identity, authority, artifact binding, and recovery after
   an uncertain external effect. Keep native provider states visible.

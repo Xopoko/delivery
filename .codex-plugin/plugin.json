@@ -1,7 +1,7 @@
 {
   "name": "delivery",
-  "version": "0.4.1",
-  "description": "Skills for app releases, social posts, YouTube uploads, and web and AWS deployments. Developed and tested with Codex.",
+  "version": "0.4.2",
+  "description": "Agent skills for app releases, social posts, YouTube uploads, and web and AWS deployments.",
   "author": {
     "name": "Xopoko"
   },
@@ -28,8 +28,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Delivery Skills",
-    "shortDescription": "App releases, publishing, and deployment with Codex.",
-    "longDescription": "Skills for releasing apps to stores, publishing videos and social posts, and deploying websites and AWS services. Developed and tested with Codex. The agent uses your existing tools and accounts to prepare releases, check results, and recover interrupted work. Includes provider guides and an optional Python helper for recording progress.",
+    "shortDescription": "Agent skills for app releases, publishing, and deployment.",
+    "longDescription": "Skills for Codex, Claude Code, Cursor, and other compatible agents to release apps, publish videos and social posts, and deploy websites and AWS services. Includes plugins for Codex and Claude Code; other agents can read the skills from a full checkout. Development and testing are primarily done with Codex. Uses your existing tools and accounts, with provider guides and an optional Python helper for recording progress.",
     "developerName": "Xopoko",
     "category": "Coding",
     "websiteURL": "https://github.com/Xopoko/delivery",

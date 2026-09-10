@@ -3,6 +3,13 @@
 Notable changes are recorded here. A version entry describes the source;
 available release tags and assets are listed on GitHub separately.
 
+## 0.4.2
+
+- Present Delivery Skills for Codex, Claude Code, Cursor, and other compatible
+  agents; distinguish the intended audience from the primary testing host.
+- Restore Claude Code installation in the README and document full-checkout
+  usage for other agents while preserving shared resource paths.
+
 ## 0.4.1
 
 - Use Delivery Skills as the display name and simplify the README and plugin
